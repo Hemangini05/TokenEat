@@ -1,0 +1,2763 @@
+<!doctype html>
+<html lang="en" class="h-full">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TokenEats - Premium Smart Mess System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #A8DF8E;
+      --secondary: #FFAAB8;
+      --accent: #FFD8DF;
+      --bg-pastel: #F0FFDF;
+      --text-dark: #2d3748;
+      --text-muted: #718096;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg-pastel);
+      color: var(--text-dark);
+      background-attachment: fixed;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #6ab85e 0%, #e87e91 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #1a3a14;
+      font-weight: 700;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .btn-primary:hover {
+      background: #97d47d;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -10px rgba(168, 223, 142, 0.5);
+    }
+
+    .btn-secondary {
+      background: white;
+      border: 2px solid var(--accent);
+      color: var(--secondary);
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-secondary:hover {
+      background: var(--accent);
+      color: #7a3e49;
+    }
+
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 8px 32px rgba(168, 223, 142, 0.1);
+    }
+
+    .glass-card {
+      background: white;
+      border: 1px solid var(--accent);
+      transition: all 0.4s ease;
+    }
+
+    .glass-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      box-shadow: 0 15px 30px -10px rgba(168, 223, 142, 0.2);
+    }
+
+    #bg-gradient {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(168, 223, 142, 0.15), transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(255, 170, 184, 0.15), transparent 40%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Animations */
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 10px;
+    }
+
+    /* Layout Stabilizers (Safety for Tailwind loading failures) */
+    svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .w-4 {
+      width: 16px !important;
+    }
+
+    .h-4 {
+      height: 16px !important;
+    }
+
+    .w-5 {
+      width: 20px !important;
+    }
+
+    .h-5 {
+      height: 20px !important;
+    }
+
+    .w-6 {
+      width: 24px !important;
+    }
+
+    .h-6 {
+      height: 24px !important;
+    }
+
+    .w-8 {
+      width: 32px !important;
+    }
+
+    .h-8 {
+      height: 32px !important;
+    }
+
+    .w-10 {
+      width: 40px !important;
+    }
+
+    .h-10 {
+      height: 40px !important;
+    }
+
+    .w-12 {
+      width: 48px !important;
+    }
+
+    .h-12 {
+      height: 48px !important;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .items-center {
+      align-items: center !important;
+    }
+
+    .justify-between {
+      justify-content: space-between !important;
+    }
+
+    .justify-center {
+      justify-content: center !important;
+    }
+
+    .flex-col {
+      flex-direction: column !important;
+    }
+
+    .gap-3 {
+      gap: 0.75rem !important;
+    }
+
+    .gap-8 {
+      gap: 2rem !important;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .fixed {
+      position: fixed !important;
+    }
+
+    .absolute {
+      position: absolute !important;
+    }
+
+    .relative {
+      position: relative !important;
+    }
+
+    .inset-0 {
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .z-50 {
+      z-index: 50 !important;
+    }
+
+    .z-10 {
+      z-index: 10 !important;
+    }
+
+    .blur-3xl {
+      filter: blur(64px);
+      opacity: 0.3;
+    }
+
+    .animate-pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: .5;
+      }
+    }
+
+    nav {
+      min-height: 64px;
+    }
+  </style>
+</head>
+
+<body class="h-full overflow-x-hidden selection:bg-indigo-500 selection:text-white">
+
+  <!-- Debug Console -->
+
+
+  <!-- Background Ambience -->
+  <div id="bg-gradient"></div>
+
+  <!-- Global Header Container -->
+  <header class="fixed top-0 w-full z-[100] transition-all duration-300" id="global-header">
+    <!-- Notification Bar -->
+    <div id="green-token-bar" class="hidden w-full bg-emerald-500 text-white px-4 py-2 shadow-lg">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <span class="text-xl">🌿</span>
+          <div class="text-xs">
+            <span class="font-bold">Green Token Active!</span>
+            <span class="opacity-90 ml-2">All leftovers <span class="font-bold underline">50% OFF</span></span>
+          </div>
+        </div>
+        <button onclick="document.getElementById('green-token-bar').classList.add('hidden')"
+          class="bg-white/20 hover:bg-white/30 rounded-full p-1 transition-colors">
+          <svg width="16" height="16" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav id="navbar" class="px-6 py-4 transition-all duration-300">
+      <div
+        class="max-w-7xl mx-auto glass-panel rounded-2xl px-6 py-3 flex items-center justify-between border-white/40 shadow-xl">
+        <div class="flex items-center gap-2">
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#A8DF8E] to-[#FFAAB8] flex items-center justify-center shadow-sm">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+          <span class="text-2xl font-black text-slate-800 tracking-tighter">Token<span
+              class="text-[#88c26d]">Eats</span></span>
+        </div>
+
+        <!-- Desktop Menu -->
+        <div id="nav-links" class="hidden md:flex items-center gap-8">
+          <a href="#" class="text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors">Home</a>
+          <a href="#menu" class="text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors">Menu</a>
+          <a href="#queue" class="text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors">Live
+            Queue</a>
+          <a href="#complaints"
+            class="nav-link text-sm font-bold text-slate-500 hover:text-slate-800 transition-colors tracking-wide">Voice</a>
+          <button onclick="showModal('staff-access')"
+            class="nav-link text-sm font-black text-[#FFAAB8] hover:text-[#ff8fa2] transition-colors tracking-wide uppercase">Staff</button>
+        </div>
+        <div id="auth-buttons" class="flex items-center gap-4">
+          <button id="nav-login-btn" onclick="showModal('login')"
+            class="btn-primary px-6 py-2.5 rounded-xl text-sm shadow-md hover:scale-105 transition-all">
+            Student Login
+          </button>
+
+          <div id="nav-user-profile" class="hidden items-center gap-3 pl-4 border-l border-slate-200">
+            <div class="text-right hidden md:block">
+              <div id="nav-user-name" class="text-sm font-black text-slate-800">Student</div>
+              <div class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Logged In</div>
+            </div>
+            <button onclick="logout()"
+              class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-xl hover:bg-red-50 hover:text-red-500 transition-colors"
+              title="Logout">
+              🚪
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative pt-32 pb-24 px-6 overflow-hidden">
+    <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+      <div class="relative z-10">
+        <div
+          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#A8DF8E]/20 border border-[#A8DF8E]/30 text-[#5fa342] text-xs font-bold mb-8 backdrop-blur-md">
+          <span class="w-2 h-2 rounded-full bg-[#A8DF8E] animate-pulse"></span>
+          Live Dining Hub Active
+        </div>
+        <h1
+          class="text-5xl md:text-7xl font-bold leading-[1.1] mb-4 text-slate-800 tracking-tight text-center lg:text-left">
+          Dining Made <br>
+          <span class="gradient-text">Soft & Simple</span>
+        </h1>
+        <p class="text-2xl md:text-3xl font-['Playfair_Display'] italic text-slate-500 mb-8 text-center lg:text-left">
+          Smart tokens. Smarter eating.
+        </p>
+        <p
+          class="text-lg text-slate-600 mb-10 max-w-lg leading-relaxed font-medium text-center lg:text-left mx-auto lg:mx-0">
+          Skip the long queues. Pre-book your meals, check live counter status, and enjoy a smarter mess experience
+          with TokenEats.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center lg:justify-start">
+          <a href="#queue"
+            class="btn-primary px-8 py-4 rounded-2xl text-slate-800 font-bold shadow-md hover:scale-105 transition-all">
+            Join Queue Now
+          </a>
+          <a href="#menu" class="btn-secondary px-8 py-4 rounded-2xl font-bold">
+            View Menu
+          </a>
+        </div>
+
+        <div class="mt-16 flex items-center justify-center lg:justify-start gap-10">
+          <div class="text-center lg:text-left">
+            <div class="text-3xl font-black text-slate-800">98%</div>
+            <div class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mt-1">Satisfaction</div>
+          </div>
+          <div class="w-px h-12 bg-slate-200"></div>
+          <div class="text-center lg:text-left">
+            <div class="text-3xl font-black text-slate-800">2min</div>
+            <div class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mt-1">Avg Wait</div>
+          </div>
+        </div>
+
+        <!-- Eco-Meter Dashboard (Hero Inline) -->
+        <div
+          class="mt-12 glass-panel p-6 rounded-3xl border-[#A8DF8E]/20 max-w-lg shadow-xl relative overflow-hidden group">
+          <div
+            class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#A8DF8E] to-transparent opacity-50">
+          </div>
+          <div class="flex justify-between items-center mb-4">
+            <h3
+              class="text-[10px] font-bold text-[#5fa342] uppercase tracking-[0.3em] flex items-center justify-center lg:justify-start gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#A8DF8E] animate-pulse"></span> Eco-Meter Dashboard
+            </h3>
+            <span
+              class="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center lg:text-right">Today's
+              Hub Stats</span>
+          </div>
+          <div class="flex items-center gap-6">
+            <div class="flex-1">
+              <div class="flex justify-between text-xs mb-2">
+                <span class="text-slate-600 font-bold">Waste Reduction efficiency</span>
+                <span class="text-[#5fa342] font-bold" id="eco-saved-pct">--%</span>
+              </div>
+              <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-[#A8DF8E]/10">
+                <div class="bg-[#A8DF8E] h-full rounded-full transition-all duration-1000" style="width: 0%"
+                  id="eco-bar"></div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-3xl font-black text-slate-800 tracking-tighter" id="eco-kg">0kg</div>
+              <div class="text-[9px] text-[#A8DF8E] uppercase font-black tracking-widest">CO2 Avoided</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative flex justify-center lg:justify-end">
+
+        <!-- Floating Card Effect -->
+        <div
+          class="absolute inset-0 bg-gradient-to-tr from-[#A8DF8E]/20 to-[#FFAAB8]/20 rounded-full blur-[100px] opacity-40">
+        </div>
+        <div class="relative glass-panel p-10 rounded-[50px] border-white transform rotate-[-3deg] shadow-2xl">
+          <!-- Mock Phone UI -->
+          <div
+            class="bg-white rounded-[40px] p-6 shadow-2xl overflow-hidden aspect-[9/19] mx-auto max-w-[300px] border-4 border-slate-100 relative">
+            <div class="space-y-8">
+              <div class="flex justify-between items-end pb-6 border-b border-slate-50">
+                <div>
+                  <div class="text-[10px] text-slate-400 font-bold uppercase tracking-[0.2em] mb-1">Welcome back</div>
+                  <div class="text-2xl font-black text-slate-800 tracking-tight">Student UI</div>
+                </div>
+                <div
+                  class="w-12 h-12 rounded-2xl bg-[#A8DF8E]/10 flex items-center justify-center border border-[#A8DF8E]/20 text-[#5fa342]">
+                  <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Token Card -->
+              <div
+                class="bg-gradient-to-br from-[#A8DF8E] to-[#8ccb73] rounded-[32px] p-8 text-white relative overflow-hidden shadow-lg shadow-[#A8DF8E]/30">
+                <div class="relative z-10">
+                  <div class="text-[10px] font-bold uppercase tracking-widest opacity-80 mb-2">My Digital Token</div>
+                  <div class="text-4xl font-mono font-black tracking-tighter mb-8">#8392</div>
+                  <div class="flex justify-between items-end">
+                    <div class="bg-white p-3 rounded-2xl shadow-inner">
+                      <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=PREVIEW" class="w-12 h-12"
+                        alt="QR">
+                    </div>
+                    <div class="text-right">
+                      <div class="text-[10px] opacity-80 font-bold uppercase tracking-widest">Queue Pos</div>
+                      <div class="text-2xl font-black">#5</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Item Preview -->
+              <div class="bg-slate-50 border-2 border-slate-100 p-5 rounded-3xl flex items-center gap-5">
+                <div
+                  class="w-14 h-14 rounded-2xl bg-[#FFAAB8]/10 flex items-center justify-center text-3xl shadow-inner">
+                </div>
+                <div>
+                  <div class="text-md font-bold text-slate-800">Soft Ramen</div>
+                  <div class="text-[10px] text-[#e87e91] font-black uppercase tracking-widest mt-1">Lunch Featured
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Status -->
+              <div class="bg-[#F0FFDF] border border-[#A8DF8E]/20 p-5 rounded-3xl">
+                <div class="flex justify-between items-center mb-4">
+                  <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Live Counters</span>
+                  <span class="text-[10px] font-bold text-[#5fa342] flex items-center gap-1.5"><span
+                      class="w-2 h-2 rounded-full bg-[#A8DF8E]"></span> Active</span>
+                </div>
+                <div class="flex gap-2">
+                  <div class="h-1.5 flex-1 bg-[#A8DF8E] rounded-full"></div>
+                  <div class="h-1.5 flex-1 bg-[#A8DF8E]/30 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+
+  <!-- Weekly Menu Section -->
+  <section id="weekly-menu" class="py-12 px-6 relative z-10 bg-white/30">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-8">
+        <h2 class="text-2xl md:text-4xl font-extrabold text-slate-800 mb-2 tracking-tight">Monthly <span
+            class="text-[#88c26d]">Mess Menu</span></h2>
+        <p class="text-slate-600 max-w-xl mx-auto mb-6 font-medium text-sm">Plan your dining experience with our
+          standard
+          mess schedule.</p>
+        <div
+          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-[#A8DF8E]/30 shadow-sm">
+          <a href="#menu"
+            class="text-[#5fa342] hover:text-[#88c26d] transition-all text-[10px] font-black uppercase tracking-widest flex items-center gap-2">
+            Explore Daily Specials <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="glass-panel p-2 rounded-[32px] border-white shadow-lg relative group overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-t from-white/40 to-transparent pointer-events-none"></div>
+        <img src="assets/menu.jpeg" alt="TokenEats Mess Menu"
+          class="w-full h-auto rounded-[24px] shadow-sm transform group-hover:scale-[1.01] transition-all duration-1000">
+
+        <div class="absolute top-6 right-6 z-20">
+          <div
+            class="px-4 py-1.5 bg-white/90 backdrop-blur-md border border-[#A8DF8E]/20 text-[#5fa342] text-[10px] font-black uppercase tracking-widest shadow-md">
+            Monthly Mess Menu
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="py-24 px-6 relative bg-white/50">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-5xl font-extrabold text-slate-800 mb-6 tracking-tight">How It <span
+            class="text-[#FFAAB8]">Works</span></h2>
+        <p class="text-slate-600 max-w-xl mx-auto font-medium">A streamlined three-step protocol designed for maximum
+          dining efficiency.</p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div
+          class="glass-card p-10 rounded-[40px] group transition-all duration-500 text-center flex flex-col items-center">
+          <div
+            class="w-20 h-20 rounded-3xl bg-[#A8DF8E]/20 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-inner text-[#5fa342]">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h3 class="text-2xl font-black text-slate-800 mb-4">📱 Smart Order</h3>
+          <p class="text-slate-600 leading-relaxed font-medium">Select your meal from our digital menu and secure your
+            spot instantly.</p>
+        </div>
+        <div
+          class="glass-card p-10 rounded-[40px] group transition-all duration-500 text-center flex flex-col items-center">
+          <div
+            class="w-20 h-20 rounded-3xl bg-[#FFAAB8]/20 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-inner text-[#e87e91]">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-2xl font-black text-slate-800 mb-4">🎫 Virtual Queue</h3>
+          <p class="text-slate-600 leading-relaxed font-medium">Monitor live counter status in real-time. No more
+            physical waiting.</p>
+        </div>
+        <div
+          class="glass-card p-10 rounded-[40px] group transition-all duration-500 text-center flex flex-col items-center">
+          <div
+            class="w-20 h-20 rounded-3xl bg-[#FFD8DF]/30 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform shadow-inner text-[#d68a96]">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h3 class="text-2xl font-black text-slate-800 mb-4">🍛 Rapid Pick-up</h3>
+          <p class="text-slate-600 leading-relaxed font-medium">Scan your digital token at the counter and enjoy your
+            meal instantly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu Section -->
+  <section id="menu" class="py-24 px-6 relative z-10 bg-white/20">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-extrabold text-slate-800 mb-2">Daily <span class="text-[#FFAAB8]">Menu</span></h2>
+        <p class="text-slate-500 font-bold max-w-2xl mx-auto">Freshly prepared meals for today's hub</p>
+      </div>
+      <div class="flex justify-center mb-12">
+        <!-- Meal Type Tabs -->
+        <div class="inline-flex bg-white p-1 rounded-2xl border border-slate-100 shadow-sm">
+          <button onclick="filterMenu('breakfast')"
+            class="menu-tab px-6 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-700 bg-[#A8DF8E] shadow-sm"
+            data-category="breakfast">Breakfast</button>
+          <button onclick="filterMenu('lunch')"
+            class="menu-tab px-6 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-400 hover:text-slate-700"
+            data-category="lunch">Lunch</button>
+          <button onclick="filterMenu('dinner')"
+            class="menu-tab px-6 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-400 hover:text-slate-700"
+            data-category="dinner">Dinner</button>
+          <button onclick="filterMenu('snacks')"
+            class="menu-tab px-6 py-2.5 rounded-xl text-sm font-bold transition-all text-slate-400 hover:text-slate-700"
+            data-category="snacks">Snacks</button>
+        </div>
+      </div>
+
+      <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 min-h-[400px]">
+        <!-- Menu cards injected via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Queue Section -->
+  <section id="queue" class="py-24 px-6 relative bg-white/40">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl md:text-5xl font-extrabold text-slate-800 mb-4 tracking-tight">Live <span
+            class="text-[#88c26d]">Counters</span></h2>
+        <p class="text-slate-600 max-w-2xl mx-auto font-medium">Check real-time availability and join the hub queue
+          from anywhere.</p>
+      </div>
+
+      <!-- Review Modal -->
+      <div id="review-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div
+          class="bg-white rounded-[32px] w-full max-w-md mx-4 relative z-10 overflow-hidden shadow-2xl flex flex-col max-h-[85vh]">
+          <div class="bg-slate-50 p-6 border-b border-slate-100 flex justify-between items-center">
+            <h3 class="text-xl font-black text-slate-800">Reviews & Ratings</h3>
+            <button onclick="closeModal()"
+              class="w-8 h-8 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center font-bold hover:bg-slate-300">✕</button>
+          </div>
+
+          <div id="review-list" class="p-6 overflow-y-auto flex-1 space-y-4">
+            <!-- Reviews injected here -->
+            <div class="text-center text-slate-400 py-10">Loading reviews...</div>
+          </div>
+
+          <div class="p-6 border-t border-slate-100 bg-slate-50">
+            <h4 class="text-sm font-bold text-slate-700 mb-3">Write a Review</h4>
+            <form id="review-form" onsubmit="handleReviewSubmit(event)" class="space-y-3">
+              <input type="hidden" id="review-menu-id">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs font-bold text-slate-500 uppercase">Rating:</span>
+                <div class="flex gap-1" id="star-rating-input">
+                  <button type="button" onclick="setRating(1)"
+                    class="text-2xl text-slate-300 hover:text-yellow-400 focus:text-yellow-400 transition-colors">★</button>
+                  <button type="button" onclick="setRating(2)"
+                    class="text-2xl text-slate-300 hover:text-yellow-400 focus:text-yellow-400 transition-colors">★</button>
+                  <button type="button" onclick="setRating(3)"
+                    class="text-2xl text-slate-300 hover:text-yellow-400 focus:text-yellow-400 transition-colors">★</button>
+                  <button type="button" onclick="setRating(4)"
+                    class="text-2xl text-slate-300 hover:text-yellow-400 focus:text-yellow-400 transition-colors">★</button>
+                  <button type="button" onclick="setRating(5)"
+                    class="text-2xl text-slate-300 hover:text-yellow-400 focus:text-yellow-400 transition-colors">★</button>
+                </div>
+                <input type="hidden" id="review-rating" value="0" required>
+              </div>
+              <textarea id="review-comment" placeholder="Share your experience..."
+                class="w-full rounded-xl bg-white border border-slate-200 p-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#A8DF8E] min-h-[80px]"
+                required></textarea>
+              <button type="submit"
+                class="w-full py-3 bg-slate-800 text-white rounded-xl font-bold shadow-lg hover:bg-slate-700 transition-all">Submit
+                Review</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Queue Status Banner (Hidden by default) -->
+      <div id="active-queue-banner" class="hidden max-w-2xl mx-auto mb-16 transform transition-all duration-500">
+        <div class="bg-white rounded-[40px] p-2 shadow-2xl border border-[#A8DF8E]/30">
+          <div class="bg-[#F0FFDF] rounded-[32px] p-10 text-center relative overflow-hidden">
+            <div
+              class="text-[#5fa342] text-[10px] font-black uppercase tracking-[0.3em] mb-6 flex items-center justify-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-[#A8DF8E] animate-pulse"></span> Live Connection Active
+            </div>
+            <div class="text-7xl font-mono font-black text-slate-800 mb-2 tracking-tighter" id="queue-position">#5
+            </div>
+            <div class="text-slate-500 text-xs font-bold mb-10 uppercase tracking-widest">Protocol Position</div>
+
+            <div class="grid grid-cols-2 divide-x divide-slate-200 mb-6">
+              <div class="px-6">
+                <div class="text-slate-800 font-black text-xl mb-1" id="queue-counter">Counter 1</div>
+                <div class="text-slate-400 text-[10px] uppercase font-black tracking-widest">Active Station</div>
+              </div>
+              <div class="px-6">
+                <div class="text-slate-800 font-black text-xl mb-1" id="queue-wait">~10 min</div>
+                <div class="text-slate-400 text-[10px] uppercase font-black tracking-widest">Est. Processing</div>
+              </div>
+            </div>
+
+            <!-- QR Code Container -->
+            <div id="queue-qr-wrapper" class="mb-8 flex justify-center hidden">
+              <div class="bg-white p-3 rounded-2xl shadow-sm inline-block">
+                <img id="queue-qr-image" src="" alt="Queue QR" class="w-32 h-32">
+                <div class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-2">Scan to Verify</div>
+              </div>
+            </div>
+
+            <button onclick="leaveQueue()"
+              class="text-[10px] font-black text-[#FFAAB8] hover:text-[#e87e91] uppercase tracking-[0.2em] transition-colors">
+              ✕ Leave Queue
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Complaint Box Section (Community Voice) -->
+      <div id="complaint-section" class="max-w-4xl mx-auto mb-16">
+        <div class="flex items-center justify-between mb-8">
+          <div>
+            <h2 class="text-2xl font-black text-slate-800 tracking-tight">Community Voice</h2>
+            <p class="text-xs text-slate-500 font-bold uppercase tracking-widest mt-1">Anonymous • 24h Visiblity</p>
+          </div>
+          <button onclick="document.getElementById('complaint-form-wrapper').classList.toggle('hidden')"
+            class="px-5 py-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider shadow-lg hover:bg-slate-700 transition-all">
+            Speak Up
+          </button>
+        </div>
+
+        <!-- Complaint Form -->
+        <div id="complaint-form-wrapper"
+          class="hidden mb-10 bg-white p-6 rounded-[32px] shadow-xl border border-slate-100">
+          <h3 class="text-sm font-black text-slate-800 mb-2 uppercase tracking-wide">Submit Anonymous Feedback</h3>
+          <p class="text-xs text-slate-400 mb-4">Your identity is hidden from the public feed. Content expires in 24
+            hours.</p>
+          <form onsubmit="handleComplaintSubmit(event)">
+            <textarea id="complaint-content"
+              class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm focus:outline-none focus:ring-2 focus:ring-[#A8DF8E] min-h-[100px] mb-4"
+              placeholder="What's on your mind? (Keep it civil)" required maxlength="500"></textarea>
+
+            <div class="flex justify-between items-center">
+              <div class="relative">
+                <input type="file" id="complaint-image" accept="image/*" class="hidden"
+                  onchange="document.getElementById('file-name-display').textContent = this.files[0]?.name || ''">
+                <label for="complaint-image"
+                  class="cursor-pointer flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  <span class="text-xs font-bold uppercase tracking-wider">Add Photo</span>
+                </label>
+                <span id="file-name-display" class="text-[10px] text-slate-400 ml-2"></span>
+              </div>
+
+              <button type="submit"
+                class="px-6 py-3 bg-[#A8DF8E] text-slate-800 rounded-xl font-black text-xs uppercase tracking-widest shadow-md hover:scale-[1.02] transition-transform">
+                Post Anonymously
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Complaint Feed -->
+        <div id="complaint-feed" class="grid gap-4 sm:grid-cols-2">
+          <!-- Loaded dynamically -->
+          <div class="col-span-full text-center py-10 text-slate-300 font-bold uppercase tracking-widest text-xs">
+            Loading Voices...</div>
+        </div>
+      </div>
+
+      <!-- Counters Grid -->
+      <div id="counters-grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Filled by JS -->
+        <div class="col-span-full flex justify-center py-10">
+          <div class="loader"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Admin Panel Section -->
+  <section id="admin-dashboard" class="hidden py-24 px-6 border-t border-slate-100 bg-white/60">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl md:text-5xl font-black text-slate-800 mb-12 tracking-tight text-center">Admin <span
+          class="text-[#FFAAB8]">Hub</span></h2>
+
+      <div class="grid lg:grid-cols-3 gap-8">
+        <!-- Add Menu Item -->
+        <div class="glass-panel p-8 rounded-3xl border-white shadow-lg">
+          <h3 class="text-xl font-black text-slate-800 mb-6 text-center">Provision Menu</h3>
+          <form onsubmit="handleAdminAddMenu(event)" class="space-y-4">
+            <input type="text" name="name" placeholder="Item Name" required
+              class="w-full bg-white border border-slate-100 rounded-xl px-4 py-3 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none transition-colors placeholder:text-slate-400">
+            <div class="grid grid-cols-2 gap-4">
+              <select name="category"
+                class="bg-white border border-slate-100 rounded-xl px-4 py-3 text-slate-600 text-sm focus:border-[#A8DF8E] focus:outline-none transition-colors">
+                <option value="breakfast">Breakfast</option>
+                <option value="lunch">Lunch</option>
+                <option value="dinner">Dinner</option>
+                <option value="snacks">Snacks</option>
+              </select>
+              <input type="number" name="price" placeholder="Price (₹)"
+                class="bg-white border border-slate-100 rounded-xl px-4 py-3 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none transition-colors placeholder:text-slate-400">
+            </div>
+            <textarea name="description" placeholder="Item description..."
+              class="w-full bg-white border border-slate-100 rounded-xl px-4 py-3 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none transition-colors placeholder:text-slate-400"
+              rows="3"></textarea>
+            <button type="submit"
+              class="w-full btn-primary py-3.5 rounded-xl text-slate-800 font-black text-sm shadow-md">Add to
+              Hub</button>
+          </form>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="glass-panel p-8 rounded-3xl col-span-2 border-white shadow-lg">
+          <h3 class="text-xl font-black text-slate-800 mb-6 text-center">Hub Intelligence</h3>
+          <div class="grid sm:grid-cols-3 gap-6" id="admin-stats">
+            <div class="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm">
+              <div class="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-2">Total Hub Users</div>
+              <div class="text-4xl font-black text-slate-800 mt-1" id="stat-users">...</div>
+            </div>
+            <div class="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm">
+              <div class="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-2">Tokens Processed</div>
+              <div class="text-4xl font-black text-slate-800 mt-1" id="stat-tokens">...</div>
+            </div>
+            <div class="bg-white border border-slate-100 rounded-3xl p-8 shadow-sm">
+              <div class="text-slate-400 font-bold uppercase tracking-[0.2em] text-[10px] mb-2">Active Protocols</div>
+              <div class="text-4xl font-black text-slate-800 mt-1" id="stat-queues">...</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Waste Management Module (New) -->
+        <div class="glass-panel p-10 rounded-[40px] col-span-3 mt-12 border-white shadow-xl">
+          <div class="flex justify-between items-center mb-10">
+            <h3 class="text-2xl font-black text-slate-800 tracking-tight">🌱 Waste <span
+                class="text-[#88c26d]">Intelligence</span></h3>
+            <button onclick="loadWasteAnalytics()"
+              class="text-[#5fa342] text-xs font-black uppercase tracking-widest hover:underline">Sync Hub
+              Data</button>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-12">
+            <!-- Left: Log Waste -->
+            <div class="bg-[#F0FFDF]/80 rounded-[32px] p-8 border border-[#A8DF8E]/20 shadow-inner">
+              <h4 class="text-[#5fa342] font-black mb-8 flex items-center gap-3 uppercase tracking-[0.2em] text-[10px]">
+                <span class="w-6 h-6 rounded-lg bg-[#A8DF8E]/30 flex items-center justify-center">🗑️</span> Daily
+                Waste Entry
+              </h4>
+              <form onsubmit="handleLogWaste(event)" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                  <select name="category"
+                    class="bg-white border border-[#A8DF8E]/10 rounded-xl px-4 py-3 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none">
+                    <option value="Rice">Rice</option>
+                    <option value="Curry">Curry</option>
+                    <option value="Sides">Sides</option>
+                  </select>
+                  <input type="number" step="0.1" name="weight" placeholder="Kg" required
+                    class="bg-white border border-[#A8DF8E]/10 rounded-xl px-4 py-3 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none placeholder:text-slate-300">
+                </div>
+                <input type="text" name="notes" placeholder="Optional notes..."
+                  class="w-full bg-white border border-[#A8DF8E]/10 rounded-xl px-4 py-3 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none placeholder:text-slate-300">
+                <button type="submit"
+                  class="w-full py-4 rounded-xl bg-[#A8DF8E] text-slate-800 font-black text-sm shadow-md hover:scale-[1.02] transition-all">Submit
+                  Entry</button>
+              </form>
+
+              <div class="mt-10">
+                <h4 class="text-[#5fa342] text-[10px] font-black mb-5 uppercase tracking-[0.2em] opacity-40">
+                  Efficiency Metrics</h4>
+                <div id="waste-stats-container" class="space-y-4">
+                  <div class="text-slate-400 text-xs text-center py-6 italic font-medium">Processing analytics...
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Redistribution -->
+            <div class="bg-[#FFD8DF]/30 rounded-[32px] p-8 border border-[#FFAAB8]/20 shadow-inner">
+              <h4 class="text-[#e87e91] font-black mb-8 flex items-center gap-3 uppercase tracking-[0.2em] text-[10px]">
+                <span class="w-6 h-6 rounded-lg bg-[#FFAAB8]/30 flex items-center justify-center">🤝</span>
+                Redistribution Protocol
+              </h4>
+
+              <!-- Green Token Status -->
+              <div
+                class="mb-10 p-6 bg-white rounded-3xl border border-[#FFAAB8]/10 flex justify-between items-center shadow-sm">
+                <div>
+                  <div class="text-[#e87e91] font-black text-sm mb-1 tracking-tight">Green Token Active</div>
+                  <div class="text-[9px] text-slate-400 font-bold uppercase tracking-widest" id="green-token-time">
+                    Starts 9:00 PM</div>
+                </div>
+                <div
+                  class="px-4 py-1.5 bg-[#F0FFDF] border border-[#A8DF8E]/20 rounded-full text-[9px] font-black text-[#5fa342] shadow-sm uppercase tracking-widest"
+                  id="green-token-status">Inactive
+                </div>
+              </div>
+
+              <h5 class="text-[#e87e91] text-[10px] font-black mb-5 uppercase tracking-[0.2em] opacity-40">Donation
+                Registry</h5>
+              <form onsubmit="handleLogDonation(event)" class="space-y-4">
+                <input type="text" name="partner" placeholder="Partner (e.g., NGO Name)" required
+                  class="w-full bg-white border border-[#FFAAB8]/10 rounded-xl px-4 py-3 text-slate-800 text-sm focus:border-[#FFAAB8] focus:outline-none placeholder:text-slate-300">
+                <div class="grid grid-cols-2 gap-4">
+                  <input type="text" name="item" placeholder="Content" required
+                    class="bg-white border border-[#FFAAB8]/10 rounded-xl px-4 py-3 text-slate-800 text-sm">
+                  <input type="number" step="0.1" name="quantity" placeholder="Kg" required
+                    class="bg-white border border-[#FFAAB8]/10 rounded-xl px-4 py-3 text-slate-800 text-sm">
+                </div>
+                <button type="submit"
+                  class="w-full py-4 rounded-xl bg-[#FFAAB8] text-[#7a3e49] font-black text-sm shadow-md hover:scale-[1.02] transition-all">Log
+                  Protocol</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Green Token Deals -->
+  <section class="py-20 px-6 bg-gradient-to-b from-white to-[#FFFDE7] border-t border-slate-100">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-12">
+        <div
+          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#A8DF8E]/20 border border-[#A8DF8E]/30 text-[#5fa342] text-xs font-bold mb-6 backdrop-blur-md">
+          <span class="w-2 h-2 rounded-full bg-[#A8DF8E] animate-pulse"></span>
+          50% Off Leftover Deals
+        </div>
+        <h2 class="text-3xl md:text-5xl font-black text-slate-800 tracking-tight mb-4">Green Token <span
+            class="text-[#A8DF8E]">Deals</span></h2>
+        <p class="text-slate-500 font-medium max-w-lg mx-auto">Grab leftover food at half price. Skip the queue, pay the
+          counter price, and help reduce food waste!</p>
+      </div>
+
+      <div class="glass-panel rounded-[32px] p-8 md:p-12 shadow-xl">
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <!-- Left: Info -->
+          <div>
+            <div class="flex items-center gap-3 mb-6">
+              <div class="w-12 h-12 rounded-2xl bg-[#A8DF8E]/20 flex items-center justify-center text-2xl">🏷️</div>
+              <div>
+                <div class="text-sm font-black text-slate-800 uppercase tracking-wide">Leftover Pack</div>
+                <div class="text-xs text-slate-400 font-bold">Available while stocks last</div>
+              </div>
+            </div>
+            <div class="space-y-3 mb-6">
+              <div class="flex items-center gap-2 text-sm text-slate-600">
+                <span class="text-[#A8DF8E]">✓</span> <span class="font-medium">50% off regular price</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-slate-600">
+                <span class="text-[#A8DF8E]">✓</span> <span class="font-medium">No queue — instant pickup</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-slate-600">
+                <span class="text-[#A8DF8E]">✓</span> <span class="font-medium">Instant receipt generated</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-slate-600">
+                <span class="text-[#A8DF8E]">✓</span> <span class="font-medium">Reduce food waste</span>
+              </div>
+            </div>
+            <div class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">♻️ Every purchase saves food
+              from waste</div>
+          </div>
+
+          <!-- Right: Pay Box -->
+          <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100">
+            <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-3">Enter Amount</label>
+            <div class="relative mb-4">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-black text-lg">₹</span>
+              <input type="number" id="coupon-amount" min="1" placeholder="Enter amount"
+                class="w-full bg-white border border-slate-200 rounded-xl pl-10 pr-4 py-4 text-slate-800 text-lg font-black focus:border-[#A8DF8E] focus:outline-none">
+            </div>
+
+            <button onclick="handleCouponRedeem()"
+              class="w-full btn-primary py-4 rounded-2xl text-slate-800 font-black shadow-lg shadow-[#A8DF8E]/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2">
+              🎟️ Redeem & Get Receipt
+            </button>
+          </div>
+        </div>
+
+        <!-- Receipt Display Area -->
+        <div id="coupon-receipt" class="hidden mt-8 border-t border-dashed border-slate-200 pt-8">
+          <!-- Receipt will be injected here -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Talk to Us Section -->
+  <section class="py-24 px-6 bg-gradient-to-b from-white to-[#F0FFDF] border-t border-slate-100">
+    <div class="max-w-3xl mx-auto">
+      <div class="text-center mb-12">
+        <div
+          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#A8DF8E]/20 border border-[#A8DF8E]/30 text-[#5fa342] text-xs font-bold mb-6 backdrop-blur-md">
+          <span class="w-2 h-2 rounded-full bg-[#A8DF8E] animate-pulse"></span>
+          Direct Line to Admin
+        </div>
+        <h2 class="text-3xl md:text-5xl font-black text-slate-800 tracking-tight mb-4">Talk to <span
+            class="text-[#A8DF8E]">Us</span></h2>
+        <p class="text-slate-500 font-medium max-w-md mx-auto">Have a suggestion about the menu or want to share
+          feedback about the food? Drop us a message directly.</p>
+      </div>
+
+      <div class="glass-panel rounded-[32px] p-8 md:p-12 shadow-xl">
+        <form onsubmit="handleFeedback(event)" class="space-y-6">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Topic</label>
+            <div class="relative">
+              <select id="fb-type"
+                class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none appearance-none font-bold">
+                <option value="Menu Change">Menu Suggestion</option>
+                <option value="Food Quality">Food Quality</option>
+                <option value="Service">Service Issue</option>
+                <option value="Other">Other</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Your Message</label>
+            <textarea id="fb-message" rows="5" required placeholder="Tell us what's on your mind..."
+              class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none resize-none"></textarea>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+            <p class="text-xs text-slate-400 font-medium italic">* Sent directly to admin@tokeneats.com</p>
+            <button type="submit"
+              class="btn-primary px-10 py-4 rounded-2xl text-slate-800 font-black shadow-lg shadow-[#A8DF8E]/20 flex items-center gap-3 hover:scale-105 transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+              Send Message
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-100 pt-24 pb-12 px-6 relative z-10">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
+        <div class="col-span-1 md:col-span-2">
+          <span class="text-3xl font-black text-slate-800 mb-8 block tracking-tighter">Token<span
+              class="text-[#A8DF8E]">Eats</span></span>
+          <p class="text-slate-500 max-w-sm leading-relaxed mb-10 font-medium">
+            Revolutionizing university dining through smart digital systems. We're on a mission to optimize campus
+            nutrition while eliminating queues and food waste.
+          </p>
+          <div class="flex gap-4">
+            <a href="#"
+              class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[#A8DF8E] hover:scale-110 transition-all">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+              </svg>
+            </a>
+            <a href="#"
+              class="w-12 h-12 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-[#FFAAB8] hover:scale-110 transition-all">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z" />
+                <circle cx="4" cy="4" r="2" />
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h4 class="text-slate-800 font-black mb-8 uppercase tracking-[0.2em] text-[10px]">Portal Access</h4>
+          <ul class="space-y-4 text-xs font-bold">
+            <li><a href="#menu" class="text-slate-400 hover:text-[#A8DF8E] transition-colors">Digital Menu</a></li>
+            <li><a href="#queue" class="text-slate-400 hover:text-[#A8DF8E] transition-colors">Live Hub</a></li>
+            <li><a href="#how-it-works" class="text-slate-400 hover:text-[#A8DF8E] transition-colors">System
+                Protocol</a></li>
+            <li><a href="#" onclick="showModal('login')" class="text-[#FFAAB8] hover:underline">Student Entry</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-slate-800 font-black mb-8 uppercase tracking-[0.2em] text-[10px]">Contact Hub</h4>
+          <ul class="space-y-4 text-xs font-bold text-slate-400">
+            <li class="flex items-center gap-3"><span class="text-[#A8DF8E]">📧</span> hello@tokeneats.com</li>
+            <li class="flex items-center gap-3"><span class="text-[#A8DF8E]">📍</span> Campus Tech Block-B</li>
+            <li class="flex items-center gap-3"><span class="text-[#A8DF8E]">🔗</span> System Repository</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- System Intelligence Bar -->
+      <div class="border-t border-slate-50 pt-16 pb-16 grid grid-cols-2 md:grid-cols-4 gap-12 mb-10">
+        <div class="text-center">
+          <div class="text-4xl font-black text-slate-800 mb-1">5K+</div>
+          <div class="text-[9px] text-slate-400 font-black uppercase tracking-[0.2em]">Active Students</div>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl font-black text-slate-800 mb-1">120K+</div>
+          <div class="text-[9px] text-slate-400 font-black uppercase tracking-[0.2em]">Meals Processed</div>
+        </div>
+        <div class="text-center">
+          <div class="text-4xl font-black text-[#A8DF8E] mb-1">95%</div>
+          <div class="text-[9px] text-slate-400 font-black uppercase tracking-[0.2em]">Wait Reduction</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-black text-[#FFAAB8] mb-1">LIVE</div>
+          <div class="text-[9px] text-slate-400 font-black uppercase tracking-[0.2em]">System Status</div>
+        </div>
+      </div>
+
+      <div
+        class="border-t border-slate-50 pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-black text-slate-300 uppercase tracking-widest">
+        <div>&copy; 2024 TokenEats Hub. All Rights Reserved.</div>
+        <div class="flex gap-10">
+          <a href="#" class="hover:text-slate-600">Privacy Protocol</a>
+          <a href="#" class="hover:text-slate-600">Service Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <div id="modal-overlay"
+    class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[200] hidden items-center justify-center p-4 transition-all duration-500">
+    <div id="modal-content"
+      class="bg-white border border-slate-200 w-full max-w-md rounded-[50px] overflow-hidden shadow-[0_30px_60px_-15px_rgba(0,0,0,0.3)] relative">
+      <!-- Modal content injected via JS -->
+    </div>
+  </div>
+
+  <!-- Review Modal -->
+  <div id="review-modal"
+    class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-[250] hidden items-center justify-center p-4 transition-all duration-500">
+    <div
+      class="bg-white border border-slate-200 w-full max-w-lg rounded-[40px] overflow-hidden shadow-2xl relative max-h-[90vh] flex flex-col">
+      <button onclick="document.getElementById('review-modal').classList.add('hidden')"
+        class="absolute top-6 right-6 p-2 rounded-full bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors z-10">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="p-8 border-b border-slate-50">
+        <h3 class="text-2xl font-black text-slate-800 tracking-tight">Reviews</h3>
+      </div>
+
+      <div class="flex-1 overflow-y-auto p-8 custom-scrollbar space-y-4" id="review-list">
+        <!-- Reviews loaded here -->
+      </div>
+
+      <div class="p-8 bg-slate-50 border-t border-slate-100">
+        <form id="review-form" onsubmit="handleReviewSubmit(event)" class="space-y-4">
+          <input type="hidden" id="review-menu-id">
+          <input type="hidden" id="review-rating" value="0">
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Rate Item</label>
+            <div class="flex gap-2" id="star-rating-input">
+              <button type="button" onclick="setRating(1)"
+                class="text-2xl text-slate-300 hover:scale-110 transition-transform">★</button>
+              <button type="button" onclick="setRating(2)"
+                class="text-2xl text-slate-300 hover:scale-110 transition-transform">★</button>
+              <button type="button" onclick="setRating(3)"
+                class="text-2xl text-slate-300 hover:scale-110 transition-transform">★</button>
+              <button type="button" onclick="setRating(4)"
+                class="text-2xl text-slate-300 hover:scale-110 transition-transform">★</button>
+              <button type="button" onclick="setRating(5)"
+                class="text-2xl text-slate-300 hover:scale-110 transition-transform">★</button>
+            </div>
+          </div>
+
+          <textarea id="review-comment" rows="3" placeholder="Share your experience..."
+            class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none resize-none"></textarea>
+
+          <button type="submit" class="w-full btn-primary py-3 rounded-xl text-slate-800 font-black shadow-md">Post
+            Review</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Cart Button -->
+  <button onclick="showCart()" id="cart-btn"
+    class="fixed bottom-6 left-6 z-50 w-14 h-14 bg-[#FFAAB8] text-[#7a3e49] rounded-full shadow-lg shadow-[#FFAAB8]/30 flex items-center justify-center transition-all transform hover:scale-110 hidden">
+    <div class="relative">
+      <svg width="24" height="24" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+      </svg>
+      <span id="cart-count"
+        class="absolute -top-2 -right-2 w-5 h-5 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">0</span>
+    </div>
+  </button>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-[300] flex flex-col-reverse gap-3"></div>
+
+  <!-- Scripts -->
+  <script>
+    const API_BASE = 'http://localhost:5000/api';
+    let currentUser = null;
+    let authToken = localStorage.getItem('token');
+    let currentCategory = 'breakfast';
+    let cart = [];
+    let currentOrderId = null;
+
+    // Console-only debug logger (UI debug box removed)
+    function debugLog(...args) {
+      console.log('[TokenEats]', ...args);
+    }
+
+    window.onerror = function (msg, url, line, col, error) {
+      debugLog(`CRIT ERR: ${msg} at ${line}:${col}`);
+      showToast('System Error: ' + msg, '❌');
+      return false;
+    };
+
+    // Placeholder for scrollToSection
+    function scrollToSection(id) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Initialization
+
+    document.addEventListener('DOMContentLoaded', () => {
+      debugLog('DOMContentLoaded: Initializing Application...');
+      checkAuth();
+      loadMenu(); // Initial load
+      loadCounters();
+      updateCartUI();
+      checkGreenTokenStatus();
+      debugLog('DOMContentLoaded: Init Complete.');
+    });
+    // Setup intervals
+    setInterval(loadCounters, 5000); // Live poll counters
+    setInterval(() => {
+      if (currentUser && currentUser.role !== 'admin') checkQueueStatus();
+    }, 5000); // Live poll queue position for user
+
+    // Theme & UI Utils
+    function showToast(msg, icon = '✨') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'bg-white border border-slate-100 text-slate-800 px-6 py-4 rounded-2xl shadow-xl flex items-center gap-4 animate-slide-up backdrop-blur-md mb-3';
+      toast.innerHTML = `
+          <div class="w-10 h-10 rounded-xl bg-[#F0FFDF] flex items-center justify-center text-xl border border-[#A8DF8E]/10">${icon}</div>
+          <span class="font-black text-sm tracking-tight">${msg}</span>
+        `;
+      container.prepend(toast);
+      setTimeout(() => {
+        toast.classList.replace('animate-slide-up', 'opacity-0');
+        toast.addEventListener('transitionend', () => toast.remove());
+      }, 3000);
+    }
+
+    // Modal System
+    function handleRoleChange() {
+      const role = document.getElementById('reg-role').value;
+      const passInput = document.getElementById('reg-password');
+      const sidInput = document.getElementById('reg-sid');
+      const nameInput = document.getElementById('reg-name');
+      const emailInput = document.getElementById('reg-email');
+      const infoMsg = document.getElementById('role-info-msg');
+
+      if (role === 'admin' || role === 'mess_incharge') {
+        // Hide fields & Remove Required
+        sidInput.classList.add('hidden');
+        sidInput.required = false;
+
+        nameInput.classList.add('hidden');
+        nameInput.required = false;
+
+        emailInput.classList.add('hidden');
+        emailInput.required = false;
+
+        // Auto-fill dummy data
+        if (role === 'admin') {
+          passInput.placeholder = "Enter Admin Access Key";
+          sidInput.value = 'ADMIN';
+          nameInput.value = 'Admin Controller';
+          emailInput.value = 'admin@tokeneats.internal';
+        } else {
+          passInput.placeholder = "Enter Incharge Passkey";
+          sidInput.value = 'INCHARGE';
+          nameInput.value = 'Mess Incharge';
+          emailInput.value = 'incharge@tokeneats.internal';
+        }
+
+        if (infoMsg) {
+          infoMsg.textContent = `Login will be auto-set to: ${role === 'admin' ? 'admin' : 'incharge'}@tokeneats.internal`;
+          infoMsg.classList.remove('hidden');
+        } else {
+          // Create info msg if missing (dynamic injection check)
+          const msg = document.createElement('p');
+          msg.id = 'role-info-msg';
+          msg.className = 'text-xs text-center text-slate-400 mt-2 font-mono';
+          msg.textContent = `Login will be auto-set to: ${role === 'admin' ? 'admin' : 'incharge'}@tokeneats.internal`;
+          const btn = document.querySelector('button[type="submit"]');
+          if (btn) btn.parentNode.insertBefore(msg, btn);
+        }
+      } else {
+        // Student
+        passInput.placeholder = "Create Password";
+
+        sidInput.classList.remove('hidden');
+        sidInput.required = true;
+
+        nameInput.classList.remove('hidden');
+        nameInput.required = true;
+
+        emailInput.classList.remove('hidden');
+        emailInput.required = true;
+
+        // Clear values
+        sidInput.value = '';
+        nameInput.value = '';
+        emailInput.value = '';
+
+        if (infoMsg) infoMsg.classList.add('hidden');
+      }
+    }
+
+    function showModal(type) {
+      debugLog(`Attempting to show modal: ${type}`);
+      const overlay = document.getElementById('modal-overlay');
+      const content = document.getElementById('modal-content');
+      let html = '';
+
+      if (type === 'login') {
+        html = `
+          <div class="p-10 relative">
+            <button onclick="closeModal()" class="absolute top-6 right-6 p-2 rounded-full bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <h3 class="text-3xl font-black text-slate-800 mb-2 tracking-tight">Welcome <span class="text-[#FFAAB8]">Back</span></h3>
+            <p class="text-slate-500 text-sm mb-8 font-medium">Access your digital dining protocols.</p>
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+              <div class="relative group">
+                <input type="email" name="email" placeholder="Email Address" required 
+                  class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none transition-all placeholder:text-slate-300">
+                <div class="absolute inset-x-0 bottom-0 h-0.5 bg-[#A8DF8E] transform scale-x-0 group-focus-within:scale-x-100 transition-transform"></div>
+              </div>
+              <div class="relative group">
+                <input type="password" name="password" placeholder="Protocol Key" required 
+                  class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none transition-all placeholder:text-slate-300">
+                <div class="absolute inset-x-0 bottom-0 h-0.5 bg-[#A8DF8E] transform scale-x-0 group-focus-within:scale-x-100 transition-transform"></div>
+              </div>
+              <button type="submit" class="w-full btn-primary py-4 rounded-2xl text-slate-800 font-black shadow-lg shadow-[#A8DF8E]/20 mt-4">Initialize Login</button>
+            </form>
+            <p class="text-center text-xs text-slate-400 mt-8 font-bold uppercase tracking-widest">
+              New user? <button onclick="showModal('register')" class="text-[#FFAAB8] hover:underline">Request Access</button>
+            </p>
+          </div>
+        `;
+
+      } else if (type === 'staff-access') {
+        html = `
+            <div class="p-10 relative">
+              <button onclick="closeModal()" class="absolute top-6 right-6 p-2 rounded-full bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+              <h3 class="text-3xl font-black text-slate-800 mb-2 tracking-tight">Staff <span class="text-[#FFAAB8]">Access</span></h3>
+              <p class="text-slate-500 text-sm mb-8 font-medium">Restricted to authorized controllers.</p>
+              
+              <form onsubmit="handleStaffAccess(event)" class="space-y-4">
+                  <div class="mb-4">
+                    <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Role</label>
+                    <div class="relative">
+                        <select id="staff-role" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none appearance-none font-bold">
+                            <option value="mess_incharge">Mess InCharge</option>
+                            <option value="admin">Admin Controller</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                        </div>
+                    </div>
+                  </div>
+                  
+                  <div class="mb-6">
+                    <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Access Key</label>
+                    <input type="password" id="staff-key" placeholder="Enter Role Key" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none">
+                  </div>
+                  
+                  <button type="submit" class="w-full btn-primary py-4 rounded-2xl text-slate-800 font-black shadow-lg mt-4">Verify & Enter</button>
+              </form>
+            </div>
+          `;
+      } else if (type === 'feedback') {
+        html = `
+          <div class="p-10 relative">
+            <button onclick="closeModal()" class="absolute top-6 right-6 p-2 rounded-full bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <h3 class="text-3xl font-black text-slate-800 mb-2 tracking-tight">Talk to <span class="text-[#A8DF8E]">Us</span></h3>
+            <p class="text-slate-500 text-sm mb-8 font-medium">Suggest a menu change or give feedback.</p>
+            
+            <form onsubmit="handleFeedback(event)" class="space-y-4">
+                <div class="mb-4">
+                    <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Topic</label>
+                    <div class="relative">
+                        <select id="fb-type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none appearance-none font-bold">
+                            <option value="Menu Change">Menu Suggestion</option>
+                            <option value="Food Quality">Food Quality</option>
+                            <option value="Service">Service Issue</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Message</label>
+                    <textarea id="fb-message" rows="4" required placeholder="Type your suggestion here..." class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none resize-none"></textarea>
+                </div>
+
+                <div class="text-xs text-slate-400 mb-4 font-medium italic">
+                    * This will be sent directly to admin@tokeneats.com
+                </div>
+
+                <button type="submit" class="w-full btn-primary py-4 rounded-2xl text-slate-800 font-black shadow-lg">Send Feedback</button>
+            </form>
+          </div>
+        `;
+      }
+
+      // Removed simplified Register modal logic as separate Staff Access replaces it.
+      // Cleaning up student register modal:
+      else if (type === 'register') {
+        html = `
+          <div class="p-10 max-h-[90vh] overflow-y-auto custom-scrollbar relative">
+            <button onclick="closeModal()" class="absolute top-6 right-6 p-2 rounded-full bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+            <h3 class="text-3xl font-black text-slate-800 mb-2 tracking-tight">Join <span class="text-[#A8DF8E]">Hub</span></h3>
+            <p class="text-slate-500 text-sm mb-8 font-medium">Create your credentials for smart dining.</p>
+            <form onsubmit="handleRegister(event)" class="space-y-4">
+              <input type="text" id="reg-name" placeholder="Full Name" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none">
+              <input type="email" id="reg-email" placeholder="Email Address" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none">
+              <input type="text" id="reg-sid" placeholder="Student ID Protocol" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none">
+              
+              <!-- Hidden Role (Fixed as Student) -->
+              <input type="hidden" id="reg-role" value="student">
+
+              <div class="mb-6">
+                <label class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Password</label>
+                <input type="password" id="reg-password" placeholder="Create Private Key" required class="w-full bg-slate-50 border border-slate-100 rounded-2xl px-5 py-4 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none">
+              </div>
+              <button type="submit" class="w-full btn-primary py-4 rounded-2xl text-slate-800 font-black shadow-lg mt-4">Finalize Registry</button>
+            </form>
+            <p class="text-center text-xs text-slate-400 mt-8 font-bold uppercase tracking-widest">
+              Existing user? <button onclick="showModal('login')" class="text-[#FFAAB8] hover:underline">Log Verification</button>
+            </p>
+          </div>
+        `;
+      } else if (type === 'cart') {
+        const total = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+        html = `
+          <div class="p-10">
+            <h3 class="text-2xl font-black text-slate-800 mb-8 tracking-tight">Your <span class="text-[#FFAAB8]">Request</span></h3>
+            <div id="cart-items" class="space-y-6 max-h-[400px] overflow-y-auto custom-scrollbar mb-8 pr-2">
+              ${cart.length === 0 ? '<div class="text-center py-12 text-slate-500 font-black uppercase tracking-widest text-xs">Registry is currently empty</div>' : cart.map((item, idx) => `
+                <div class="flex justify-between items-center group">
+                  <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center text-2xl border border-slate-100">🍛</div>
+                    <div>
+                      <div class="font-black text-slate-800 text-sm">${item.name}</div>
+                      <div class="text-[10px] text-slate-400 uppercase font-black tracking-widest mt-0.5">₹${item.price}</div>
+                    </div>
+                  </div>
+                  <button onclick="modifyCart('${item.id}', -1)" class="w-8 h-8 rounded-lg bg-slate-50 text-slate-300 hover:bg-[#FFD8DF] hover:text-[#FFAAB8] transition-all flex items-center justify-center border border-slate-100">✕</button>
+                </div>
+              `).join('')}
+            </div>
+            
+            ${cart.length > 0 ? `
+              <div class="pt-8 border-t border-slate-100">
+                <div class="flex justify-between items-end mb-8">
+                  <div>
+                    <div class="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">Total Payload</div>
+                    <div class="text-3xl font-black text-slate-800 tracking-tighter">₹${total}</div>
+                  </div>
+                  <div class="text-xs font-bold text-slate-400">${cart.length} Protocol Items</div>
+                </div>
+                
+                <div class="space-y-4">
+                  <div class="flex gap-2">
+                    <button id="delivery-pickup" onclick="selectDeliveryOption('pickup')" class="flex-1 py-3 px-4 rounded-xl bg-[#A8DF8E] text-slate-800 text-sm font-black shadow-md transition-all">Hub Pick-up</button>
+                    <button id="delivery-table" onclick="selectDeliveryOption('table-delivery')" class="flex-1 py-3 px-4 rounded-xl bg-white border-2 border-slate-100 text-slate-400 hover:bg-slate-50 text-sm font-black transition-all">Table Unit</button>
+                  </div>
+                  <input type="text" id="table-number-input" placeholder="Table Protocol ID (Required)" class="hidden w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-slate-800 text-sm focus:border-[#A8DF8E] focus:outline-none">
+                  <button onclick="placeOrder()" class="w-full btn-primary py-4 rounded-2xl text-slate-800 font-black shadow-lg">Confirm Protocols</button>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+
+      content.innerHTML = html;
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+
+      // Set default delivery option for cart modal
+      if (type === 'cart') {
+        window.selectedDeliveryOption = 'pickup';
+        selectDeliveryOption('pickup'); // Apply initial styling
+      }
+    }
+
+    function closeModal() {
+      const overlay = document.getElementById('modal-overlay');
+      overlay.classList.add('hidden');
+      overlay.classList.remove('flex');
+
+      const reviewModal = document.getElementById('review-modal');
+      if (reviewModal) reviewModal.classList.add('hidden');
+    }
+
+    // --- API Interactions ---
+
+    // UI Updates
+    function updateNav(user) {
+      const loginBtn = document.getElementById('nav-login-btn');
+      const userProfile = document.getElementById('nav-user-profile');
+      const userName = document.getElementById('nav-user-name');
+
+      if (user) {
+        if (loginBtn) loginBtn.classList.add('hidden');
+        if (userProfile) {
+          userProfile.classList.remove('hidden');
+          userProfile.classList.add('flex');
+        }
+        if (userName) userName.textContent = user.name.split(' ')[0];
+      } else {
+        if (loginBtn) loginBtn.classList.remove('hidden');
+        if (userProfile) {
+          userProfile.classList.add('hidden');
+          userProfile.classList.remove('flex');
+        }
+      }
+    }
+
+    // Auth
+    // Auth
+    async function checkAuth() {
+      if (!authToken) return updateNav(null);
+      try {
+        const res = await fetch(`${API_BASE}/auth/me`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          // getMe returns data: user (direct object), unlike login which returns data: { user, token }
+          currentUser = data.data;
+
+          updateNav(currentUser);
+          if (currentUser.role === 'admin' || currentUser.role === 'mess_incharge') loadAdminStats();
+          else {
+            checkQueueStatus();
+            loadComplaints();
+          }
+        } else if (res.status === 401 || res.status === 403) {
+          logout();
+        } else {
+          console.error('Auth check failed with status:', res.status);
+          // Non-fatal error (e.g. 500), keep token
+        }
+      } catch (e) {
+        console.error('Auth check error:', e);
+        // Do NOT logout on network error, keep session active
+      }
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const form = e.target;
+      try {
+        const res = await fetch(`${API_BASE}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: form.email.value, password: form.password.value })
+        });
+        const data = await res.json();
+        if (data.success) {
+          loginSuccess(data.data);
+        } else {
+          const msg = (data.errors && data.errors.length > 0) ? data.errors[0].message : data.message;
+          showToast(msg, '⚠️');
+        }
+      } catch (e) { showToast('Connection Error', '❌'); }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value;
+      const studentId = document.getElementById('reg-sid').value;
+      const role = document.getElementById('reg-role').value;
+      const password = document.getElementById('reg-password').value;
+
+      try {
+        const res = await fetch(`${API_BASE}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password, role, studentId })
+        });
+        const data = await res.json();
+        if (data.success) {
+          loginSuccess(data.data);
+          showToast('Account created successfully!');
+        } else {
+          const msg = (data.errors && data.errors.length > 0) ? data.errors[0].message : data.message;
+          showToast(msg, '⚠️');
+        }
+      } catch (e) { showToast('Connection Error', '❌'); }
+    }
+
+    async function handleStaffAccess(e) {
+      e.preventDefault();
+      const role = document.getElementById('staff-role').value;
+      const key = document.getElementById('staff-key').value;
+
+      const email = `${role === 'admin' ? 'admin' : 'incharge'}@tokeneats.internal`;
+
+      showToast('Verifying Access...', '🔐');
+
+      // Try Registering First (Smart Access)
+      try {
+        const regRes = await fetch(`${API_BASE}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: role === 'admin' ? 'Admin Controller' : 'Mess Incharge',
+            email,
+            password: key,
+            role,
+            studentId: role === 'admin' ? 'ADMIN' : 'INCHARGE'
+          })
+        });
+        const regData = await regRes.json();
+
+        if (regData.success) {
+          // Success Register -> Auto Login
+          loginSuccess(regData.data);
+          return;
+        } else if (regData.message === 'Email already registered' || regRes.status === 400) {
+          // Already exists -> Try Login
+          const loginRes = await fetch(`${API_BASE}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password: key })
+          });
+          const loginData = await loginRes.json();
+          if (loginData.success) {
+            loginSuccess(loginData.data);
+          } else {
+            showToast('Invalid Access Key', '❌');
+          }
+        } else {
+          showToast(regData.message || 'Access Denied', '❌');
+        }
+      } catch (err) {
+        showToast('Connection Error', '❌');
+      }
+    }
+
+    function loginSuccess(data) {
+      authToken = data.token;
+      localStorage.setItem('token', authToken);
+      currentUser = data.user;
+      updateNav(currentUser);
+      closeModal();
+      showToast(`Welcome, ${currentUser.name}!`);
+
+      if (currentUser.role === 'admin' || currentUser.role === 'mess_incharge') {
+        window.location.href = 'staff_dashboard.html';
+      } else {
+        checkQueueStatus();
+        loadComplaints();
+      }
+    }
+
+    async function handleCouponRedeem() {
+      if (!currentUser) {
+        showToast('Please login first', '🔒');
+        setTimeout(() => showModal('login'), 1000);
+        return;
+      }
+
+      const amount = parseInt(document.getElementById('coupon-amount').value);
+      if (!amount || amount < 1) {
+        showToast('Enter a valid amount (min ₹1)', '⚠️');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/coupons/redeem`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ paidAmount: amount })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          showToast('Coupon redeemed!', '🎉');
+          const order = data.data;
+          const receiptDiv = document.getElementById('coupon-receipt');
+          receiptDiv.classList.remove('hidden');
+          receiptDiv.innerHTML = `
+              <div class="bg-slate-900 text-white rounded-3xl p-8 max-w-sm mx-auto font-mono relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#A8DF8E] via-[#FFAAB8] to-[#A8DF8E]"></div>
+                <div class="text-center mb-6">
+                  <div class="text-2xl font-black tracking-tighter mb-1">Token<span class="text-[#A8DF8E]">Eats</span></div>
+                  <div class="text-[10px] text-slate-400 uppercase tracking-[0.3em]">Green Token Receipt</div>
+                </div>
+                <div class="border-t border-dashed border-slate-700 py-4 space-y-2 text-sm">
+                  <div class="flex justify-between"><span class="text-slate-400">Receipt ID</span><span class="text-[#A8DF8E] font-bold">${order.receiptId}</span></div>
+                  <div class="flex justify-between"><span class="text-slate-400">Student</span><span>${order.userName}</span></div>
+                  <div class="flex justify-between"><span class="text-slate-400">Item</span><span>${order.items}</span></div>
+                  <div class="flex justify-between"><span class="text-slate-400">Original Price</span><span class="line-through text-slate-500">₹${order.originalPrice}</span></div>
+                  <div class="flex justify-between text-lg font-black"><span class="text-[#A8DF8E]">You Paid</span><span class="text-[#A8DF8E]">₹${order.paidAmount}</span></div>
+                </div>
+                <div class="border-t border-dashed border-slate-700 pt-4 mt-2 text-center">
+                  <div class="text-[10px] text-slate-500 uppercase tracking-widest">♻️ Thank you for reducing food waste</div>
+                  <div class="text-[9px] text-slate-600 mt-2">${new Date(order.createdAt).toLocaleString()}</div>
+                </div>
+              </div>
+            `;
+          receiptDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        } else {
+          showToast(data.message || 'Failed to redeem', '⚠️');
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('Connection Error', '❌');
+      }
+    }
+
+    async function handleFeedback(e) {
+      e.preventDefault();
+      if (!currentUser) {
+        showToast('Please login to send feedback', '🔒');
+        setTimeout(() => showModal('login'), 1000);
+        return;
+      }
+
+      // Get values from the actual form that was submitted
+      const form = e.target;
+      const typeSelect = form.querySelector('select');
+      const messageArea = form.querySelector('textarea');
+      const type = typeSelect ? typeSelect.value : 'Other';
+      const message = messageArea ? messageArea.value : '';
+
+      if (!message.trim()) {
+        showToast('Please enter a message', '⚠️');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/suggestions`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({ type, message })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          closeModal();
+          form.reset();
+          showToast('Feedback sent to Admin!', '📧');
+        } else {
+          showToast(data.message || 'Failed to send', '⚠️');
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('Backend not running — feedback cannot be sent right now', '⚠️');
+      }
+    }
+
+    window.logout = function () {
+      authToken = null;
+      currentUser = null;
+      localStorage.removeItem('token');
+      updateNav(null);
+      showToast('Logged out successfully');
+      setTimeout(() => window.location.reload(), 500); // Small delay to let toast show
+    }
+
+    function updateNav(user) {
+      const navLinks = document.getElementById('nav-links');
+      const authButtons = document.getElementById('auth-buttons');
+
+      if (user) {
+        let roleBadge = '';
+        let dashboardLink = '';
+
+        if (user.role === 'admin') {
+          roleBadge = '<span class="px-2 py-0.5 bg-purple-100 text-purple-600 rounded text-[10px] font-black uppercase tracking-wider">Admin</span>';
+          dashboardLink = `<button onclick="scrollToSection('admin-dashboard')" class="text-slate-500 hover:text-slate-800 font-bold text-sm transition-colors">Dashboard</button>`;
+        } else if (user.role === 'mess_incharge') {
+          roleBadge = '<span class="px-2 py-0.5 bg-orange-100 text-orange-600 rounded text-[10px] font-black uppercase tracking-wider">InCharge</span>';
+          // Mess InCharge gets specific view (could be same dashboard ID but filtered content, or we hide User section)
+          dashboardLink = `<button onclick="scrollToSection('admin-dashboard')" class="text-slate-500 hover:text-slate-800 font-bold text-sm transition-colors">Kitchen</button>`;
+        } else {
+          roleBadge = '<span class="px-2 py-0.5 bg-blue-100 text-blue-600 rounded text-[10px] font-black uppercase tracking-wider">Student</span>';
+        }
+
+        authButtons.innerHTML = `
+          <div class="flex items-center gap-4">
+            <div class="text-right hidden sm:block">
+              <div class="text-xs font-black text-slate-800 uppercase tracking-wide flex items-center justify-end gap-2">
+                ${user.name} ${roleBadge}
+              </div>
+              <div class="text-[10px] text-slate-400 font-bold tracking-wider">${user.studentId || user.email}</div>
+            </div>
+            <button onclick="logout()" class="w-10 h-10 rounded-xl bg-slate-100 text-slate-400 hover:bg-[#FFD8DF] hover:text-[#FFAAB8] flex items-center justify-center transition-all">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            </button>
+          </div>
+        `;
+
+        // Dynamic Nav Links
+        // Dynamic Nav Links
+        navLinks.innerHTML = `
+            ${dashboardLink}
+            <a href="#menu" class="text-slate-500 hover:text-slate-800 font-bold text-sm transition-colors">Daily Menu</a>
+            <a href="#queue" class="text-slate-500 hover:text-slate-800 font-bold text-sm transition-colors">Live Queue</a>
+            <a href="#how-it-works" class="text-slate-500 hover:text-slate-800 font-bold text-sm transition-colors">Protocol</a>
+            <button onclick="showModal('staff-access')" class="text-[#FFAAB8] hover:text-[#ff8fa2] font-black text-sm transition-colors uppercase tracking-wide">Staff</button>
+        `;
+
+        // Update Admin/Kitchen Dashboard Visibility
+        const adminSection = document.getElementById('admin-dashboard');
+        if (user.role === 'admin' || user.role === 'mess_incharge') {
+          adminSection.classList.remove('hidden');
+          // If Mess InCharge, hide "Users" tab/section if it exists (assuming it's inside dashboard)
+          // For now, let's just show the dashboard. Backend protects the data.
+        } else {
+          adminSection.classList.add('hidden');
+        }
+
+      } else {
+        authButtons.innerHTML = `
+          <button onclick="showModal('login')" class="px-5 py-2.5 rounded-xl font-bold text-slate-500 hover:text-slate-800 transition-colors text-sm">Login</button>
+          <button onclick="showModal('register')" class="hidden sm:inline-block px-5 py-2.5 rounded-xl bg-[#A8DF8E] text-slate-800 font-black shadow-md shadow-[#A8DF8E]/20 hover:shadow-lg hover:-translate-y-0.5 transition-all text-sm tracking-wide">Get Started</button>
+        `;
+        navLinks.innerHTML = `
+            <button onclick="scrollToSection('weekly-menu')" class="text-slate-500 hover:text-slate-800 font-bold text-sm transition-colors">Menu</button>
+            <button onclick="scrollToSection('counters-grid')" class="text-slate-500 hover:text-slate-800 font-bold text-sm transition-colors">Live Queue</button>
+            <button onclick="scrollToSection('community-voice')" class="text-slate-500 hover:text-slate-800 font-bold text-sm transition-colors">Voice</button>
+            <button onclick="showModal('staff-access')" class="text-[#FFAAB8] hover:text-[#ff8fa2] font-black text-sm transition-colors uppercase tracking-wide">Staff</button>
+        `;
+        document.getElementById('admin-dashboard').classList.add('hidden');
+      }
+    }
+
+    // Fallback demo data when backend is not running
+    const DEMO_MENU = {
+      breakfast: [
+        { _id: 'd1', name: 'Masala Dosa', description: 'Crispy dosa with spiced potato filling, served with sambar & chutney', price: 40, isVeg: true, isAvailable: true, calories: 280, image: 'https://images.unsplash.com/photo-1668236543090-82d8b7d5d6e4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd2', name: 'Poha', description: 'Flattened rice with peanuts, onions, and fresh herbs', price: 30, isVeg: true, isAvailable: true, calories: 180, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd3', name: 'Egg Bhurji', description: 'Scrambled eggs with onion, tomato, and Indian spices with toast', price: 45, isVeg: false, isAvailable: true, calories: 320, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd4', name: 'Idli Sambar', description: 'Steamed rice cakes with lentil soup and coconut chutney', price: 35, isVeg: true, isAvailable: true, calories: 220, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd5', name: 'Paratha Combo', description: 'Two stuffed parathas with curd, pickle, and butter', price: 50, isVeg: true, isAvailable: true, calories: 400, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd6', name: 'Upma', description: 'Semolina cooked with vegetables and mustard seeds', price: 25, isVeg: true, isAvailable: false, calories: 200, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }
+      ],
+      lunch: [
+        { _id: 'd7', name: 'Veg Thali', description: 'Complete meal with dal, sabzi, roti, rice, salad & dessert', price: 80, isVeg: true, isAvailable: true, calories: 650, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd8', name: 'Chicken Biryani', description: 'Fragrant basmati rice with tender chicken, raita & salan', price: 120, isVeg: false, isAvailable: true, calories: 750, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd9', name: 'Paneer Butter Masala', description: 'Rich creamy tomato gravy with paneer cubes, served with naan', price: 90, isVeg: true, isAvailable: true, calories: 550, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd10', name: 'Rajma Chawal', description: 'Kidney beans curry with steamed rice and onion salad', price: 60, isVeg: true, isAvailable: true, calories: 480, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd11', name: 'Fish Curry', description: 'Coastal-style fish curry with steamed rice', price: 110, isVeg: false, isAvailable: true, calories: 520, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd12', name: 'Chole Bhature', description: 'Spiced chickpea curry with fluffy fried bread', price: 70, isVeg: true, isAvailable: false, calories: 600, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }
+      ],
+      dinner: [
+        { _id: 'd13', name: 'Dal Makhani', description: 'Slow-cooked black lentils in creamy butter gravy with roti', price: 75, isVeg: true, isAvailable: true, calories: 450, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd14', name: 'Chicken Tikka', description: 'Tandoori grilled chicken with mint chutney and salad', price: 100, isVeg: false, isAvailable: true, calories: 380, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd15', name: 'Mixed Veg Pulao', description: 'Fragrant rice with seasonal vegetables and raita', price: 65, isVeg: true, isAvailable: true, calories: 420, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd16', name: 'Egg Curry', description: 'Boiled eggs in spiced onion-tomato gravy with rice', price: 70, isVeg: false, isAvailable: true, calories: 400, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd17', name: 'Aloo Gobi', description: 'Potato and cauliflower dry curry with chapati', price: 55, isVeg: true, isAvailable: true, calories: 350, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd18', name: 'Noodles', description: 'Indo-Chinese style hakka noodles with vegetables', price: 50, isVeg: true, isAvailable: true, calories: 380, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }
+      ],
+      snacks: [
+        { _id: 'd19', name: 'Samosa', description: 'Crispy pastry with spiced potato and pea filling', price: 20, isVeg: true, isAvailable: true, calories: 150, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+        { _id: 'd20', name: 'Tea/Coffee', description: 'Hot beverage', price: 15, isVeg: true, isAvailable: true, calories: 50, image: 'https://images.unsplash.com/photo-1626804475177-896621d30ae2?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' }
+      ]
+    };
+
+    const DEMO_COUNTERS = [
+      { id: 'c1', name: 'Counter 1', type: 'Vegetarian', icon: '🥬', isOpen: true, currentLoad: 5, loadPercentage: 35, estimatedWaitTime: 8 },
+      { id: 'c2', name: 'Counter 2', type: 'Non-Vegetarian', icon: '🍗', isOpen: true, currentLoad: 12, loadPercentage: 75, estimatedWaitTime: 15 },
+      { id: 'c3', name: 'Counter 3', type: 'Snacks & Beverages', icon: '☕', isOpen: true, currentLoad: 3, loadPercentage: 20, estimatedWaitTime: 4 },
+      { id: 'c4', name: 'Counter 4', type: 'Special Menu', icon: '⭐', isOpen: false, currentLoad: 0, loadPercentage: 0, estimatedWaitTime: 0 }
+    ];
+
+    // Menu Logic
+    async function loadMenu() {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 500); // 0.5 second timeout for fast fallback
+
+      try {
+        const res = await fetch(`${API_BASE}/menu`, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        const data = await res.json();
+        console.log('Menu Data API Response:', data);
+        if (data.success) {
+          window.menuData = data.data.items;
+          renderMenu(currentCategory);
+          return;
+        }
+      } catch (e) {
+        console.error('Menu load error:', e);
+        console.warn('Backend not available, using demo data', e);
+      }
+      // Fallback to demo data
+      window.menuData = DEMO_MENU;
+      renderMenu(currentCategory);
+    }
+
+    function filterMenu(category) {
+      currentCategory = category;
+      // Update Tabs
+      document.querySelectorAll('.menu-tab').forEach(el => {
+        if (el.dataset.category === category) {
+          el.className = "menu-tab px-6 py-2 rounded-lg text-sm font-medium transition-all text-white bg-slate-700 shadow-sm";
+        } else {
+          el.className = "menu-tab px-6 py-2 rounded-lg text-sm font-medium transition-all text-slate-400 hover:text-white";
+        }
+      });
+      renderMenu(category);
+    }
+
+    function renderMenu(category) {
+      const container = document.getElementById('menu-grid');
+      const items = window.menuData ? window.menuData[category] : [];
+
+      if (!items || items.length === 0) {
+        container.innerHTML = '<div class="col-span-full text-center py-20 text-slate-400 font-bold uppercase tracking-widest text-xs">No entries in this protocol</div>';
+        return;
+      }
+      container.innerHTML = items.map(item => `
+        <div class="glass-card p-6 rounded-[32px] group relative overflow-hidden flex flex-col justify-between">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-[#A8DF8E]/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl group-hover:bg-[#A8DF8E]/10 transition-all"></div>
+          
+          <div class="relative z-10">
+            <div class="flex justify-between items-start mb-6">
+              <div class="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center text-4xl shadow-inner border border-slate-100">🍛</div>
+              <div class="text-right">
+                <div class="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mb-1">Standard Rate</div>
+                <div class="text-2xl font-black text-slate-800 tracking-tighter">₹${item.price}</div>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-2 mb-2">
+               <div class="flex text-yellow-400 text-sm">
+                 ${'★'.repeat(Math.round(item.averageRating || 0))}${'☆'.repeat(5 - Math.round(item.averageRating || 0))}
+               </div>
+               <span class="text-xs text-slate-400 font-bold">(${item.ratingCount || 0} reviews)</span>
+            </div>
+
+            <h3 class="text-xl font-black text-slate-800 mb-2 leading-tight">${item.name}</h3>
+            <p class="text-sm text-slate-500 line-clamp-2 leading-relaxed font-medium">${item.description || 'Standard nutritional profile provided.'}</p>
+          </div>
+          
+          <div class="mt-8 flex items-center justify-between gap-4 relative z-10">
+            <button onclick="openReviewModal('${item._id || item.id}', decodeURIComponent('${encodeURIComponent(item.name)}'))" 
+              class="px-4 py-2 rounded-xl bg-slate-100 text-slate-600 text-xs font-bold uppercase tracking-wider hover:bg-slate-200 transition-colors">
+              Read Reviews
+            </button>
+            
+            <button onclick="handleAddToCartClick(this)" 
+              data-id="${item._id || item.id}" 
+              data-name="${encodeURIComponent(item.name)}" 
+              data-price="${item.price}"
+              class="w-12 h-12 rounded-2xl bg-slate-800 text-white flex items-center justify-center shadow-lg hover:bg-slate-700 transition-all shadow-slate-800/20 group-hover:scale-110 active:scale-95">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // --- Cart & Order Logic ---
+    function handleAddToCartClick(btn) {
+      debugLog('Add to Cart clicked');
+      const id = btn.getAttribute('data-id');
+      const name = decodeURIComponent(btn.getAttribute('data-name'));
+      const price = parseFloat(btn.getAttribute('data-price'));
+      addToCart(id, name, price);
+    }
+
+    function addToCart(id, name, price) {
+      console.log('Adding to cart:', { id, name, price });
+      const existing = cart.find(i => i.id === id);
+      if (existing) existing.quantity++;
+      else cart.push({ id, name, price, quantity: 1 });
+      updateCartUI();
+      showToast('Added to cart');
+    }
+
+    function updateCartUI() {
+      const btn = document.getElementById('cart-btn');
+      const count = document.getElementById('cart-count');
+      const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+
+      count.textContent = totalItems;
+      if (totalItems > 0) btn.classList.remove('hidden');
+      else btn.classList.add('hidden');
+    }
+
+    function showCart() {
+      if (cart.length === 0) return showToast('Cart is empty');
+      showModal('cart');
+    }
+
+    function selectDeliveryOption(option) {
+      window.selectedDeliveryOption = option;
+      const pickupBtn = document.getElementById('delivery-pickup');
+      const tableBtn = document.getElementById('delivery-table');
+      const tableInput = document.getElementById('table-number-input');
+
+      if (option === 'pickup') {
+        pickupBtn.className = 'flex-1 py-3 px-4 rounded-xl bg-[#A8DF8E] text-slate-800 text-sm font-black shadow-md transition-all';
+        tableBtn.className = 'flex-1 py-3 px-4 rounded-xl bg-white border-2 border-slate-100 text-slate-400 hover:bg-slate-50 text-sm font-black transition-all';
+        tableInput.classList.add('hidden');
+      } else {
+        tableBtn.className = 'flex-1 py-3 px-4 rounded-xl bg-[#FFAAB8] text-[#7a3e49] text-sm font-black shadow-md transition-all';
+        pickupBtn.className = 'flex-1 py-3 px-4 rounded-xl bg-white border-2 border-slate-100 text-slate-400 hover:bg-slate-50 text-sm font-black transition-all';
+        tableInput.classList.remove('hidden');
+      }
+    }
+
+    function modifyCart(id, change) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.quantity += change;
+      if (item.quantity <= 0) cart = cart.filter(i => i.id !== id);
+      updateCartUI();
+      if (cart.length === 0) closeModal();
+      else showCart(); // Re-render
+    }
+
+    async function placeOrder() {
+      if (!currentUser) return showModal('login');
+
+      try {
+        const orderItems = cart.map(i => ({ menuItemId: i.id, quantity: i.quantity }));
+
+        // Get delivery preferences
+        const deliveryOption = window.selectedDeliveryOption || 'pickup';
+        const tableNumber = deliveryOption === 'table-delivery'
+          ? document.getElementById('table-number-input')?.value
+          : null;
+
+        // Validate table number for table delivery
+        if (deliveryOption === 'table-delivery' && !tableNumber) {
+          return showToast('Please enter your table number', '⚠️');
+        }
+
+        const res = await fetch(`${API_BASE}/orders`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({
+            items: orderItems,
+            deliveryOption,
+            tableNumber,
+            isGreenToken: window.isGreenTokenActive || false
+          })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          currentOrderId = data.data._id;
+          cart = [];
+          updateCartUI();
+          closeModal();
+
+          // Show vintage receipt
+          showReceipt(data.data);
+        } else {
+          showToast(data.message || 'Order failed', '❌');
+        }
+      } catch (e) { showToast('Order failed', '❌'); }
+    }
+
+    function showReceipt(orderData) {
+      const receiptTime = new Date(orderData.createdAt || Date.now());
+      const formattedDate = receiptTime.toLocaleDateString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric'
+      });
+      const formattedTime = receiptTime.toLocaleTimeString('en-US', {
+        hour: '2-digit', minute: '2-digit'
+      });
+
+      const itemsHtml = orderData.items.map(item => `
+          <tr style="border-bottom: 1px solid #334155;">
+            <td style="padding: 16px 0; color: #fff; font-weight: 700; font-size: 14px;">${item.name}</td>
+            <td style="padding: 16px 0; text-align: center; color: #94a3b8; font-weight: 700; font-size: 13px;">${item.quantity}</td>
+            <td style="padding: 16px 0; text-align: right; color: #fff; font-weight: 800; font-size: 14px;">₹${(item.price * item.quantity).toFixed(2)}</td>
+          </tr>
+        `).join('');
+
+      const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=RCPT-${orderData.receiptId}`;
+
+      const html = `
+          <div id="receipt-container" style="background: #0f172a; padding: 24px; width: 100%; max-width: 400px; margin: 0 auto; font-family: 'Courier New', monospace; color: #e2e8f0; border-radius: 16px; box-shadow: 0 0 40px rgba(0,0,0,0.6); border: 1px solid #334155; max-height: 80vh; overflow-y: auto;">
+            <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px dashed #334155; padding-bottom: 16px;">
+              <h2 style="margin: 0; font-size: 24px; font-weight: 900; letter-spacing: -1px; color: #fff;">Token<span style="color: #A8DF8E;">Eats</span></h2>
+              <div style="margin-top: 4px; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 3px; color: #94a3b8;">Digitized Receipt</div>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 11px; color: #94a3b8;">
+                <span>TERMINAL ID</span>
+                <span style="color: #A8DF8E; font-weight: bold;">TE-8842</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 11px; color: #94a3b8;">
+                <span>TIMESTAMP</span>
+                <span style="color: #fff;">${formattedDate} ${formattedTime}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 11px; color: #94a3b8;">
+                <span>USER HASH</span>
+                <span style="color: #fff; text-transform: uppercase;">${currentUser?.name || 'GUEST'}</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-top: 12px; font-size: 13px; color: #fff; background: #1e293b; padding: 8px; border-radius: 6px;">
+                <span style="color: #FFAAB8; font-weight: bold;">ORDER ID</span>
+                <span style="font-weight: 900; letter-spacing: 1px;">#${orderData.receiptId}</span>
+              </div>
+            </div>
+
+            <table style="width: 100%; margin-bottom: 24px; border-collapse: collapse;">
+              <thead>
+                <tr style="border-bottom: 1px solid #334155;">
+                  <th style="padding: 8px 0; text-align: left; color: #64748b; font-size: 9px; letter-spacing: 1px;">ITEM</th>
+                  <th style="padding: 8px 0; text-align: center; color: #64748b; font-size: 9px; letter-spacing: 1px;">QTY</th>
+                  <th style="padding: 8px 0; text-align: right; color: #64748b; font-size: 9px; letter-spacing: 1px;">PRICE</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${itemsHtml}
+              </tbody>
+            </table>
+
+            <div style="text-align: right; margin-bottom: 30px;">
+              <div style="font-size: 9px; font-weight: bold; color: #94a3b8; letter-spacing: 2px; margin-bottom: 4px;">TOTAL AMOUNT</div>
+              <div style="font-size: 32px; font-weight: 900; color: #A8DF8E; text-shadow: 0 0 15px rgba(168, 223, 142, 0.2);">₹${orderData.totalAmount.toFixed(2)}</div>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 24px; position: relative;">
+               <div style="background: #fff; padding: 8px; display: inline-block; border-radius: 8px;">
+                  <img src="${qrCodeUrl}" alt="Verification" style="width: 100px; height: 100px;">
+               </div>
+               <div style="margin-top: 12px; font-size: 8px; color: #64748b; letter-spacing: 2px;">SCAN TO VERIFY</div>
+            </div>
+
+            <div style="display: flex; gap: 10px; padding-top: 16px; border-top: 2px dashed #334155;">
+              <button onclick="window.print()" style="flex: 1; padding: 12px; background: #A8DF8E; border: none; border-radius: 10px; color: #0f172a; font-weight: 900; font-size: 11px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;">Download Receipt</button>
+              <button onclick="closeModal()" style="flex: 1; padding: 12px; background: transparent; border: 1px solid #475569; border-radius: 10px; color: #94a3b8; font-weight: bold; font-size: 11px; cursor: pointer; text-transform: uppercase;">Close</button>
+            </div>
+          </div>
+        `;
+
+      document.getElementById('modal-content').innerHTML = html;
+      const overlay = document.getElementById('modal-overlay');
+      overlay.classList.remove('hidden');
+      overlay.classList.add('flex');
+    }
+
+    function printReceipt() {
+      const receiptContent = document.getElementById('receipt-container').innerHTML;
+      const printWindow = window.open('', '', 'width=600,height=800');
+      printWindow.document.write(`
+        <html>
+          <head>
+            <title>Receipt - TokenEats</title>
+            <style>
+              body { margin: 0; padding: 20px; }
+              @media print {
+                body { margin: 0; }
+                button { display: none; }
+              }
+            </style>
+          </head>
+          <body>
+            ${receiptContent}
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      printWindow.focus();
+      setTimeout(() => printWindow.print(), 250);
+    }
+
+    // Queue Logic
+    function renderCounters(counters) {
+      const grid = document.getElementById('counters-grid');
+      grid.innerHTML = counters.map(c => `
+          <div class="glass-panel p-8 rounded-[32px] border-white shadow-lg relative overflow-hidden group">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#A8DF8E]/5 rounded-full blur-3xl group-hover:bg-[#A8DF8E]/10 transition-all"></div>
+            
+            <div class="relative z-10">
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-14 h-14 rounded-2xl bg-white flex items-center justify-center text-3xl shadow-inner border border-slate-50">${c.icon}</div>
+                <div>
+                  <h3 class="font-black text-slate-800 text-lg tracking-tight">${c.name}</h3>
+                  <div class="text-[10px] text-slate-400 font-black uppercase tracking-widest">${c.type}</div>
+                </div>
+              </div>
+              
+              <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-slate-50/50 rounded-2xl p-4 border border-slate-100/50">
+                  <div class="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-1">Load Factor</div>
+                  <div class="text-2xl font-black ${c.loadPercentage > 80 ? 'text-[#FFAAB8]' : 'text-[#88c26d]'}">${c.currentLoad}</div>
+                </div>
+                <div class="bg-slate-50/50 rounded-2xl p-4 border border-slate-100/50">
+                  <div class="text-[9px] text-slate-400 font-black uppercase tracking-widest mb-1">Queue Time</div>
+                  <div class="text-2xl font-black text-slate-800">${c.estimatedWaitTime}<span class="text-sm font-bold text-slate-300 ml-1">m</span></div>
+                </div>
+              </div>
+
+              <button onclick="joinQueue('${c._id || c.id}')" 
+                class="w-full py-4 rounded-2xl ${c.loadPercentage > 90 ? 'bg-slate-100 text-slate-400' : 'bg-[#A8DF8E] text-slate-800'} font-black text-sm shadow-md transition-all hover:scale-[1.02] active:scale-95"
+                ${c.loadPercentage > 90 ? 'disabled' : ''}>
+                ${c.loadPercentage > 90 ? 'STATION FULL' : 'JOIN QUEUE'}
+              </button>
+            </div>
+          </div>
+        `).join('');
+    }
+
+    async function loadCounters() {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 500);
+      try {
+        const res = await fetch(`${API_BASE}/counters/availability`, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        const data = await res.json();
+        if (data.success) {
+          renderCounters(data.data.counters);
+          return;
+        }
+      } catch (e) {
+        console.warn('Backend not available for counters, using demo data');
+      }
+      // Fallback to demo data
+      renderCounters(DEMO_COUNTERS);
+    }
+
+    async function joinQueue(counterId) {
+      if (!currentUser) return showModal('login');
+
+      const payload = { counterId, mealType: currentCategory };
+      if (currentOrderId) payload.orderId = currentOrderId;
+
+      try {
+        const res = await fetch(`${API_BASE}/queue/join`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          showToast('Joined Queue Successfully! 🚀');
+          checkQueueStatus();
+        } else {
+          showToast(data.message, '⚠️');
+        }
+      } catch (e) { showToast('Error joining queue', '❌'); }
+    }
+
+    async function checkQueueStatus() {
+      try {
+        const res = await fetch(`${API_BASE}/queue/status`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+
+        const banner = document.getElementById('active-queue-banner');
+        if (data.success && data.data.inQueue) {
+          banner.classList.remove('hidden');
+
+          // Basic Info
+          document.getElementById('queue-position').textContent = `#${data.data.position} `;
+          document.getElementById('queue-counter').textContent = data.data.counter.name;
+          document.getElementById('queue-wait').textContent = `~${data.data.estimatedWaitTime} min`;
+
+          // Enhanced Info (QR & Order)
+          const qrWrapper = document.getElementById('queue-qr-wrapper');
+          const qrImage = document.getElementById('queue-qr-image');
+
+          if (qrWrapper && qrImage) {
+            const qrCodeUrl = data.data.qrCode || `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Q-${data.data.counter?.id || '0'}-POS-${data.data.position}`;
+            qrImage.src = qrCodeUrl;
+            qrWrapper.classList.remove('hidden');
+          }
+
+          const orderContainer = document.getElementById('queue-order-info');
+          if (data.data.order) {
+            const orderText = `Order: #${data.data.order.receiptId} `;
+            if (!orderContainer) {
+              const ordDiv = document.createElement('div');
+              ordDiv.id = 'queue-order-info';
+              ordDiv.className = 'mt-2 text-sky-400 font-mono text-sm';
+              ordDiv.textContent = orderText;
+              document.querySelector('#active-queue-banner .bg-[#F0FFDF]').appendChild(ordDiv);
+            } else {
+              orderContainer.textContent = orderText;
+            }
+          }
+
+        } else {
+          banner.classList.add('hidden');
+        }
+      } catch (e) { console.error('Queue check error', e); }
+    }
+
+    async function leaveQueue() {
+      if (!confirm('Are you sure you want to leave the queue?')) return;
+      try {
+        const res = await fetch(`${API_BASE}/queue/leave`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Left queue');
+          checkQueueStatus(); // Hides banner
+        }
+      } catch (e) { showToast('Error leaving queue', '❌'); }
+    }
+
+    // Admin Functions
+    async function handleAdminAddMenu(e) {
+      e.preventDefault();
+      if (!currentUser || currentUser.role !== 'admin') return;
+
+      const form = e.target;
+      try {
+        const res = await fetch(`${API_BASE}/menu`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({
+            name: form.name.value,
+            category: form.category.value,
+            price: form.price.value,
+            description: form.description.value
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Item added to menu');
+          form.reset();
+          loadMenu();
+        } else {
+          showToast(data.message, '⚠️');
+        }
+      } catch (e) { showToast('Error adding item', '❌'); }
+    }
+
+    async function deleteMenuItem(id) {
+      if (!confirm('Delete this item?')) return;
+      try {
+        const res = await fetch(`${API_BASE}/menu/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (res.ok) {
+          showToast('Item deleted');
+          loadMenu();
+        }
+      } catch (e) { showToast('Error deleting item', '❌'); }
+    }
+
+    async function loadAdminStats() {
+      try {
+        const res = await fetch(`${API_BASE}/admin/dashboard-stats`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          document.getElementById('stat-users').textContent = data.data.overview.totalUsers;
+          document.getElementById('stat-tokens').textContent = data.data.overview.todayTokens;
+          document.getElementById('stat-queues').textContent = data.data.overview.activeTokens; // approx
+        }
+      } catch (e) { }
+    }
+
+    // --- Waste Management Logic ---
+
+    async function handleLogWaste(e) {
+      e.preventDefault();
+      const form = e.target;
+      try {
+        const res = await fetch(`${API_BASE}/waste`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({
+            category: form.category.value,
+            weightKg: form.weight.value,
+            notes: form.notes.value
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Waste logged successfully', '🗑️');
+          form.reset();
+          loadWasteAnalytics(); // Refresh stats
+        }
+      } catch (e) { showToast('Error logging waste', '❌'); }
+    }
+
+    async function handleLogDonation(e) {
+      e.preventDefault();
+      const form = e.target;
+      try {
+        const res = await fetch(`${API_BASE}/waste/donate`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({
+            partnerName: form.partner.value,
+            contactPhone: 'N/A',
+            foodItems: [{ name: form.item.value, quantityKg: form.quantity.value }]
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Donation logged! Partner notified.', '🤝');
+          form.reset();
+        }
+      } catch (e) { showToast('Error logging donation', '❌'); }
+    }
+
+    async function loadWasteAnalytics() {
+      try {
+        const res = await fetch(`${API_BASE}/waste/analytics`);
+        const data = await res.json();
+        if (data.success) {
+          // Dynamic Green Token Meter Logic
+          const savedKg = data.data.savedMassKg || 0;
+
+          // Determine scale (1kg -> 10kg -> 100kg)
+          let maxScale = 1;
+          if (savedKg > 1) maxScale = 10;
+          if (savedKg > 10) maxScale = 100;
+          if (savedKg > 100) maxScale = 1000;
+
+          const percentage = Math.min((savedKg / maxScale) * 100, 100);
+
+          document.getElementById('eco-saved-pct').textContent = percentage.toFixed(1) + '%';
+          document.getElementById('eco-bar').style.width = percentage + '%';
+          document.getElementById('eco-kg').textContent = savedKg.toFixed(2) + 'kg';
+
+          // Allow label to show scale
+          const meterLabel = document.querySelector('#eco-meter-label') || document.getElementById('eco-saved-pct').parentElement;
+          // (assuming structure, simplified: just update the text content implies the scale context)
+          // Ideally we update a label saying "Target: X kg" but for now user asked for meter filling behavior.
+
+          // Update Admin Panel Stats
+          const container = document.getElementById('waste-stats-container');
+          if (container) {
+            container.innerHTML = data.data.stats.map(s => `
+                <div class="bg-white border border-slate-100 rounded-xl p-4 flex justify-between items-center text-sm shadow-sm hover:shadow-md transition-all">
+                  <div>
+                    <div class="text-slate-800 font-black">${s.category}</div>
+                   <div class="text-xs text-slate-500">Prep: ${s.prepared}kg</div>
+                 </div>
+                  <div class="text-right">
+                    <div class="text-[#FFAAB8] font-black">-${s.wasted}kg</div>
+                    <div class="text-[#5fa342] text-[10px] font-black uppercase tracking-widest">${s.efficiency} Efficiency</div>
+                 </div>
+               </div>
+             `).join('');
+          }
+        }
+      } catch (e) { console.error('Failed to load waste analytics', e); }
+    }
+
+    async function checkGreenTokenStatus() {
+      try {
+        // FORCE TRUE FOR DEMO: ?force=true
+        const res = await fetch(`${API_BASE}/waste/green-token?force=true`);
+        const data = await res.json();
+        const statusEl = document.getElementById('green-token-status');
+        window.isGreenTokenActive = data.active; // Store global state
+
+        if (statusEl) {
+          statusEl.textContent = data.active ? 'ACTIVE' : 'INACTIVE';
+          statusEl.className = data.active ?
+            "px-3 py-1 bg-[#A8DF8E] text-slate-800 rounded-full text-[10px] font-black animate-pulse" :
+            "px-3 py-1 bg-slate-100 rounded-full text-[10px] text-slate-400 font-black";
+        }
+
+        if (data.active) {
+          showToast('Green Token Alert: 50% Off Leftovers!', '🌿');
+          const bar = document.getElementById('green-token-bar');
+          if (bar) {
+            bar.classList.remove('hidden');
+          }
+        } else {
+          const bar = document.getElementById('green-token-bar');
+          if (bar) bar.classList.add('hidden');
+        }
+      } catch (e) { }
+    }
+
+
+
+
+    // --- Complaint Logic ---
+
+    async function loadComplaints() {
+      const feed = document.getElementById('complaint-feed');
+      if (!feed) return; // Guard clause
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 500);
+      try {
+        const res = await fetch(`${API_BASE}/complaints/public`, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        const data = await res.json();
+
+        if (data.success) {
+          if (data.data.length === 0) {
+            feed.innerHTML = '<div class="col-span-full text-center py-10 text-slate-400 italic font-medium">No active murmurs. The quiet is nice. 🍃</div>';
+            return;
+          }
+
+          feed.innerHTML = data.data.map(c => `
+                    <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group hover:shadow-md transition-all">
+                        <div class="absolute top-0 right-0 w-16 h-16 bg-slate-50 rounded-bl-full -mr-8 -mt-8 z-0"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px]">🕵️</span>
+                                <span class="text-xs font-black text-slate-400 uppercase tracking-wider">Anonymous Student</span>
+                                <span class="text-[10px] text-slate-300 ml-auto">${new Date(c.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                            </div>
+                            <p class="text-slate-700 text-sm leading-relaxed font-medium mb-3">"${c.content}"</p>
+                            ${c.image ? `<img src="${c.image}" class="w-full h-48 object-cover rounded-xl border border-slate-100" />` : ''}
+                        </div>
+                    </div>
+                `).join('');
+        }
+      } catch (e) {
+        console.error(e);
+        feed.innerHTML = '<div class="col-span-full text-center py-10 text-slate-400 italic font-medium">No active murmurs. The quiet is nice. 🍃</div>';
+      }
+    }
+
+    // --- Reviews Logic ---
+    let currentReviewRating = 0;
+    let currentReviewMenuId = null;
+
+    window.openReviewModal = function (id, name) {
+      console.log('Opening review modal for:', id, name);
+      currentReviewMenuId = id;
+      document.getElementById('review-menu-id').value = id;
+      const titleEl = document.getElementById('review-modal-title');
+      if (titleEl) titleEl.textContent = `Reviews: ${name}`;
+
+      loadReviews(id);
+      const modal = document.getElementById('review-modal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    };
+
+    window.closeReviewModal = function () {
+      const modal = document.getElementById('review-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+      currentReviewMenuId = null;
+      currentReviewRating = 0;
+      updateStarDisplay(0);
+      const form = document.getElementById('review-form');
+      if (form) form.reset();
+    };
+
+    async function loadReviews(menuItemId) {
+      const list = document.getElementById('review-list');
+      if (!list) return;
+      list.innerHTML = '<div class="text-center py-4 text-slate-400">Loading reviews...</div>';
+      try {
+        const res = await fetch(`${API_BASE}/reviews/${menuItemId}`);
+        const data = await res.json();
+        if (data.success && data.data && data.data.length > 0) {
+          list.innerHTML = data.data.map(r => `
+                    <div class="p-4 bg-slate-50 rounded-xl mb-2">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="font-bold text-sm text-slate-700">${r.userId?.name || 'Anonymous'}</span>
+                            <div class="text-yellow-400 text-xs">
+                                ${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-500 line-clamp-3">${r.comment || ''}</p>
+                        <div class="text-[10px] text-slate-300 mt-1 text-right">${new Date(r.createdAt).toLocaleDateString()}</div>
+                    </div>
+                `).join('');
+        } else {
+          list.innerHTML = '<div class="text-center py-8 text-slate-300 italic text-xs">No reviews yet. Be the first!</div>';
+        }
+      } catch (e) {
+        console.error('Reviews load error:', e);
+        list.innerHTML = '<div class="text-center py-4 text-red-300 text-xs">Failed to load reviews</div>';
+      }
+    }
+
+    window.setRating = function (n) {
+      currentReviewRating = n;
+      const ratingInput = document.getElementById('review-rating');
+      if (ratingInput) ratingInput.value = n;
+      updateStarDisplay(n);
+    };
+
+    function updateStarDisplay(n) {
+      const stars = document.querySelectorAll('#star-rating-input button');
+      stars.forEach((btn, idx) => {
+        btn.className = idx < n ?
+          "text-2xl text-yellow-400 hover:scale-110 transition-transform" :
+          "text-2xl text-slate-200 hover:scale-110 transition-transform";
+      });
+    }
+
+
+
+    window.handleReviewSubmit = async function (e) {
+      e.preventDefault();
+      if (!currentUser) return showModal('login');
+
+      const commentEl = document.getElementById('review-comment'); // Assuming textarea ID
+      // HTML check: ID is likely inside modal but distinct.
+      // Wait, modal HTML (Step 612): <textarea ... placeholder="Share your experience..."></textarea> inside form.
+      // It has NO ID? Or name?
+      // Let's check modal HTML.
+      // Assuming review-form structure from Step 695 view (lines 1135+).
+      // It has <div ... id="star-rating-input">.
+      // Textarea?
+
+      // I will trust form elements by index if needed or just form.elements
+      const form = e.target;
+      // Textarea usually last or named.
+      const comment = form.querySelector('textarea')?.value || '';
+
+      if (currentReviewRating === 0) return showToast('Please select a rating', '⭐');
+
+      try {
+        const res = await fetch(`${API_BASE}/reviews`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
+          body: JSON.stringify({
+            menuItemId: currentReviewMenuId,
+            rating: currentReviewRating,
+            comment
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Review posted!');
+          closeReviewModal();
+          loadMenu(); // Refresh ratings
+        } else {
+          showToast(data.message || 'Error posting review', '⚠️');
+        }
+      } catch (e) { showToast('Connection error', '❌'); }
+    };
+
+    async function handleComplaintSubmit(e) {
+      e.preventDefault();
+      if (!currentUser) return showModal('login');
+
+      const content = document.getElementById('complaint-content').value;
+      const imageInput = document.getElementById('complaint-image');
+
+      const formData = new FormData();
+      formData.append('content', content);
+      if (imageInput.files[0]) {
+        formData.append('image', imageInput.files[0]);
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/complaints`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+            // Content-Type is auto-set for FormData
+          },
+          body: formData
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+          showToast('Voice heard. Posted anonymously. 🕵️');
+          document.getElementById('complaint-content').value = '';
+          document.getElementById('complaint-image').value = ''; // Reset file
+          document.getElementById('file-name-display').textContent = '';
+          document.getElementById('complaint-form-wrapper').classList.add('hidden');
+          loadComplaints();
+        } else {
+          showToast(data.message || 'Error posting', '⚠️');
+        }
+      } catch (e) {
+        showToast('Connection error', '❌');
+      }
+    }
+
+    // Auto-load complaints on init if not admin
+    document.addEventListener('DOMContentLoaded', () => {
+      checkAuth(); // Restore session
+      filterMenu('lunch'); // Load default menu
+      checkQueueStatus(); // Load queue immediately
+      loadComplaints();
+      checkGreenTokenStatus();
+
+      // Start Live Polling
+      setInterval(() => {
+        checkQueueStatus();
+        // loadWasteAnalytics(); // Optional: poll waste stats too
+        checkGreenTokenStatus();
+      }, 5000); // Poll every 5 seconds
+    });
+
+  </script>
+</body>
+
+</html>
